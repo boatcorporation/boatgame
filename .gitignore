@@ -66,6 +66,8 @@ atlassian-ide-plugin.xml
 /*/docs/src/snippets/**/build
 /*/internal-android-performance-testing/build-android-libs
 test-splits/
+!src/**/build/
+**/build/
 
 # Ignore GUI config
 gradle-app.setting
