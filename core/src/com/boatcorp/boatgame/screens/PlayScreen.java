@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.boatcorp.boatgame.entities.Player;
 import com.boatcorp.boatgame.tools.ShapeMaker;
 
 import static com.boatcorp.boatgame.screens.Constants.*;
@@ -23,7 +24,7 @@ public class PlayScreen implements Screen {
     private final Box2DDebugRenderer mB2dr;
     private final OrthographicCamera mCamera;
     private final Viewport mViewport;
-    private final Body mPlayer;
+    private final Player mPlayer;
 
     public PlayScreen() {
         mBatch = new SpriteBatch();
@@ -32,7 +33,8 @@ public class PlayScreen implements Screen {
         mCamera = new OrthographicCamera();
         mCamera.zoom = DEFAULT_ZOOM;
         mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
-        mPlayer = ShapeMaker.createRectangle(new Vector2(0,0), new Vector2(64, 128), BodyDef.BodyType.DynamicBody, mWorld, 0.4f);
+       // mPlayer = ShapeMaker.createRectangle(new Vector2(0,0), new Vector2(64, 128), BodyDef.BodyType.DynamicBody, mWorld, 0.4f);
+        mPlayer = new Player(0, 0);
     }
 
     @Override
