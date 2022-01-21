@@ -12,4 +12,4 @@ public class Constants {
 
     public static final String MAP_NAME = "Maps/basic_map.tmx";
     public static final String PLAYER = "Player";
-}
+

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.boatcorp.boatgame.tools.MapLoader;
+import com.boatcorp.boatgame.frameworks.PointSystem;
 import com.boatcorp.boatgame.tools.ShapeMaker;
 
 import static com.boatcorp.boatgame.screens.Constants.*;
@@ -20,15 +22,19 @@ import static com.boatcorp.boatgame.screens.Constants.*;
 public class PlayScreen implements Screen {
 
     private final SpriteBatch mBatch;
+    private final SpriteBatch mFontBatch;
     private final World mWorld;
     private final Box2DDebugRenderer mB2dr;
     private final OrthographicCamera mCamera;
     private final Viewport mViewport;
     private final Body mPlayer;
     private final MapLoader mMapLoader;
+    private final BitmapFont mFont;
+    private final PointSystem mPoints;
 
     public PlayScreen() {
         mBatch = new SpriteBatch();
+        mFontBatch = new SpriteBatch();
         mWorld = new World(GRAVITY, true);
         mB2dr = new Box2DDebugRenderer();
         mCamera = new OrthographicCamera();
@@ -36,6 +42,8 @@ public class PlayScreen implements Screen {
         mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
         mMapLoader = new MapLoader(mWorld);
         mPlayer = ShapeMaker.createRectangle(new Vector2(1250, 1250), new Vector2(64,128), BodyDef.BodyType.DynamicBody, mWorld, 0.4f);
+        mFont = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
+        mPoints = new PointSystem();
 
     }
 
@@ -54,6 +62,15 @@ public class PlayScreen implements Screen {
     }
 
     private void draw() {
+        // mFontBatch drawing
+        mFontBatch.begin();
+        mFont.getData().setScale(0.5f);
+        String displayPoint = "SCORE:" + mPoints.getPoints();
+        mFont.draw(mFontBatch, displayPoint, 8, 472);
+
+        mFontBatch.end();
+
+        // mBatch drawing
         mBatch.setProjectionMatrix(mCamera.combined);
         mB2dr.render(mWorld, mCamera.combined);
         mMapLoader.render(mCamera);
@@ -88,6 +105,7 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
         mBatch.dispose();
+        mFontBatch.dispose();
         mWorld.dispose();
         mB2dr.dispose();
         mMapLoader.dispose();
