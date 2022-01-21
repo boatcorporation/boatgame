@@ -35,7 +35,7 @@ public class PlayScreen implements Screen {
         mCamera.zoom = DEFAULT_ZOOM;
         mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
         mMapLoader = new MapLoader(mWorld);
-        mPlayer = ShapeMaker.createRectangle(new Vector2(2500,2500), new Vector2(64,128), BodyDef.BodyType.DynamicBody, mWorld, 0.4f);
+        mPlayer = ShapeMaker.createRectangle(new Vector2(1250, 1250), new Vector2(64,128), BodyDef.BodyType.DynamicBody, mWorld, 0.4f);
 
     }
 
