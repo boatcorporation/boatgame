@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.boatcorp.boatgame.tools.MapLoader;
 import com.boatcorp.boatgame.tools.ShapeMaker;
 
 import static com.boatcorp.boatgame.screens.Constants.*;
@@ -24,6 +25,7 @@ public class PlayScreen implements Screen {
     private final OrthographicCamera mCamera;
     private final Viewport mViewport;
     private final Body mPlayer;
+    private final MapLoader mMapLoader;
 
     public PlayScreen() {
         mBatch = new SpriteBatch();
@@ -33,6 +35,7 @@ public class PlayScreen implements Screen {
         mCamera.zoom = DEFAULT_ZOOM;
         mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
         mPlayer = ShapeMaker.createRectangle(new Vector2(0,0), new Vector2(64, 128), BodyDef.BodyType.DynamicBody, mWorld, 0.4f);
+        mMapLoader = new MapLoader(mWorld);
     }
 
     @Override
@@ -52,6 +55,7 @@ public class PlayScreen implements Screen {
     private void draw() {
         mBatch.setProjectionMatrix(mCamera.combined);
         mB2dr.render(mWorld, mCamera.combined);
+        mMapLoader.render(mCamera);
     }
 
     private void update(final float delta) {
@@ -85,5 +89,6 @@ public class PlayScreen implements Screen {
         mBatch.dispose();
         mWorld.dispose();
         mB2dr.dispose();
+        mMapLoader.dispose();
     }
 }
