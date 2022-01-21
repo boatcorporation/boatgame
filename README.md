@@ -45,3 +45,13 @@ ios/
     build.gradle           <- Gradle build file for the iOS project*
     src/                   <- Source folder for your iOS project, contains launcher
 ```
+
+Core Folder Architecture
+
+```
+src/...
+  entities/
+  screens/
+  tools/
+  BoatGame.java
+```
