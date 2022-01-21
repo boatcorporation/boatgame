@@ -34,8 +34,9 @@ public class PlayScreen implements Screen {
         mCamera = new OrthographicCamera();
         mCamera.zoom = DEFAULT_ZOOM;
         mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
-        mPlayer = ShapeMaker.createRectangle(new Vector2(0,0), new Vector2(64, 128), BodyDef.BodyType.DynamicBody, mWorld, 0.4f);
         mMapLoader = new MapLoader(mWorld);
+        mPlayer = ShapeMaker.createRectangle(new Vector2(2500,2500), new Vector2(64,128), BodyDef.BodyType.DynamicBody, mWorld, 0.4f);
+
     }
 
     @Override
@@ -66,7 +67,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        mViewport.update(width, height);
+        mCamera.setToOrtho(false,width/16,height/16);
     }
 
     @Override
