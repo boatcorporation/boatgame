@@ -10,5 +10,5 @@ public class Constants {
     public static final float DEFAULT_ZOOM = 6f;
     public static final float PPM = 50.0f;
 
-    public static final String MAP_NAME = "maps/basic_map.tmx";
+    public static final String MAP_NAME = "Maps/basic_map.tmx";
 }
