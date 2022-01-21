@@ -51,6 +51,7 @@ Core Folder Architecture
 ```
 src/...
   entities/
+  frameworks/
   screens/
   tools/
   BoatGame.java
