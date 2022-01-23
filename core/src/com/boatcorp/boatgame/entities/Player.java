@@ -41,6 +41,33 @@ public class Player extends Sprite {
         return mousePosition;
     }
 
+    public void moveToMousePosition(){
+        if ((x < mousePosition.x) & (y < mousePosition.y)){
+            do {
+                x = x + 5;
+                y = y + 5;        
+            }while((x < mousePosition.x) & (y < mousePosition.y));
+        }
+        if ((x < mousePosition.x) & (y > mousePosition.y)){
+            do {
+                x = x + 5;
+                y = y + 5;
+            }while((x < mousePosition.x) & (y > mousePosition.y));
+        }
+        if ((x > mousePosition.x) & (y < mousePosition.y)){
+            do {
+                x = x + 5;
+                y = y + 5;
+            }while((x > mousePosition.x) & (y < mousePosition.y));
+        }
+        if ((x > mousePosition.x) & (y > mousePosition.y)){
+            do {
+                x = x + 5;
+                y = y + 5;
+            }while((x > mousePosition.x) & (y > mousePosition.y));
+        }
+    }
+
     public Vector2 getPosition(){
         Vector2 v = new Vector2(x,y);
         return v;
