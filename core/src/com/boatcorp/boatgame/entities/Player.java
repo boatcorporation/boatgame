@@ -14,6 +14,7 @@ public class Player extends Sprite {
     private float x;
     private float y;
     private Vector2 position;
+    private final Vector2 mousePosition = new Vector2();
 
     public Player(float X,float Y){
 
@@ -33,6 +34,13 @@ public class Player extends Sprite {
             x = x + 4;
         }
     }
+
+    public Vector2 getMousePosition(){
+        mousePosition.x = Gdx.input.getX();
+        mousePosition.y = Gdx.input.getY();
+        return mousePosition;
+    }
+
     public Vector2 getPosition(){
         Vector2 v = new Vector2(x,y);
         return v;
