@@ -84,7 +84,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        mCamera.setToOrtho(false,width/16,height/16);
+        mCamera.setToOrtho(false,(float)width/16,(float)height/16);
     }
 
     @Override
