@@ -48,23 +48,23 @@ public class Player extends Sprite {
                 y = y + 5;        
             }while((x < mousePosition.x) & (y < mousePosition.y));
         }
-        if ((x < mousePosition.x) & (y > mousePosition.y)){
+        else if ((x < mousePosition.x) & (y > mousePosition.y)){
             do {
                 x = x + 5;
-                y = y + 5;
+                y = y - 5;
             }while((x < mousePosition.x) & (y > mousePosition.y));
         }
-        if ((x > mousePosition.x) & (y < mousePosition.y)){
+        else if ((x > mousePosition.x) & (y < mousePosition.y)){
             do {
-                x = x + 5;
+                x = x - 5;
                 y = y + 5;
             }while((x > mousePosition.x) & (y < mousePosition.y));
         }
-        if ((x > mousePosition.x) & (y > mousePosition.y)){
+        else if ((x > mousePosition.x) & (y > mousePosition.y)) {
             do {
-                x = x + 5;
-                y = y + 5;
-            }while((x > mousePosition.x) & (y > mousePosition.y));
+                x = x - 5;
+                y = y - 5;
+            } while ((x > mousePosition.x) & (y > mousePosition.y));
         }
     }
 
