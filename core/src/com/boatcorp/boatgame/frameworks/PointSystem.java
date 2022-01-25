@@ -1,10 +1,10 @@
 package com.boatcorp.boatgame.frameworks;
 
 public class PointSystem {
-    private static int points;
+    private static float points;
 
     public static int getPoints() {
-        return points;
+        return (int)points;
     }
 
     public static void setPoints(int points) {
@@ -12,7 +12,11 @@ public class PointSystem {
     }
 
     public static void incrementPoint() {
-        points++;
+        points += 1f;
+    }
+
+    public static void incrementPoint(float amount) {
+        points += amount;
     }
 
     public static void update(final float delta) {
