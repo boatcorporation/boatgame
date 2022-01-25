@@ -1,25 +1,18 @@
 package com.boatcorp.boatgame.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.boatcorp.boatgame.tools.MapLoader;
+import com.boatcorp.boatgame.entities.Player;
 import com.boatcorp.boatgame.frameworks.PointSystem;
-import com.boatcorp.boatgame.tools.ShapeMaker;
-import entities.Player;
+import com.boatcorp.boatgame.tools.MapLoader;
 
 import static com.boatcorp.boatgame.screens.Constants.*;
 
@@ -30,7 +23,6 @@ public class PlayScreen implements Screen {
     private final World world;
     private final Box2DDebugRenderer b2dr;
     private final OrthographicCamera camera;
-    private final Body bPlayer;
     private final MapLoader mapLoader;
     private final BitmapFont font;
     private final Player player;
@@ -43,10 +35,9 @@ public class PlayScreen implements Screen {
         camera = new OrthographicCamera();
         camera.zoom = DEFAULT_ZOOM;
         Viewport viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
-        mapLoader = new MapLoader(world);
+        mapLoader = new MapLoader();
 
         player = new Player(0, 0);
-        bPlayer = mapLoader.getPlayer();
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
     }
 
@@ -65,9 +56,10 @@ public class PlayScreen implements Screen {
     }
 
     private void draw() {
-        // batch drawing
+        // Batch drawing
         player.batch.setProjectionMatrix(camera.combined);
         batch.setProjectionMatrix(camera.combined);
+
 
         b2dr.render(world, camera.combined);
 
@@ -79,7 +71,7 @@ public class PlayScreen implements Screen {
         // Empty batch
         batch.end();
 
-        // fontBatch drawing
+        // FontBatch drawing
         fontBatch.begin();
         font.getData().setScale(0.5f);
         String displayPoint = "SCORE:" + PointSystem.getPoints();
@@ -88,7 +80,6 @@ public class PlayScreen implements Screen {
     }
 
     private void update(final float delta) {
-
         camera.position.set(player.getPosition(), 0);
         camera.update();
         world.step(delta, 6,2);

@@ -1,4 +1,4 @@
-package entities;
+package com.boatcorp.boatgame.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -12,10 +12,10 @@ public class Player {
     public Vector2 position = new Vector2();
     public SpriteBatch batch;
 
-    private int RIGHT = 0;
-    private int DOWN = 1;
-    private int LEFT = 2;
-    private int UP = 3;
+    private final int RIGHT = 0;
+    private final int DOWN = 1;
+    private final int LEFT = 2;
+    private final int UP = 3;
 
     public final Texture texture = new Texture(Gdx.files.internal("Maps/boat1.png"));
     private final Sprite sprite;

@@ -12,7 +12,6 @@ public class Constants {
     public static final float PPM = 25.0f;
 
     public static final String MAP_NAME = "Maps/basic_map.tmx";
-    public static final String PLAYER = "Player";
 
 }
 
