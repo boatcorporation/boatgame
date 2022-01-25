@@ -16,6 +16,7 @@ public class Player {
     private final int DOWN = 1;
     private final int LEFT = 2;
     private final int UP = 3;
+    private final float MAX_SPEED = 3f;
 
     public final Texture texture = new Texture(Gdx.files.internal("Maps/boat1.png"));
     private final Sprite sprite;
@@ -60,8 +61,7 @@ public class Player {
     }
 
     public void update (final float delta) {
-        horizontalMovement(delta);
-        verticalMovement(delta);
+        movement(delta);
 
         if(xVelocity > 0) {
             direction = RIGHT;
@@ -80,18 +80,42 @@ public class Player {
         y = y + yVelocity;
     }
 
-    private void horizontalMovement(final float delta) {
+    private void movement(final float delta) {
+        // Horizontal movement
+        boolean right = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+        boolean left = Gdx.input.isKeyPressed(Input.Keys.LEFT);
+        boolean up = Gdx.input.isKeyPressed(Input.Keys.UP);
+        boolean down = Gdx.input.isKeyPressed(Input.Keys.DOWN);
+        boolean horizontal = right || left;
+        boolean vertical = up || down;
+        boolean diagonal = horizontal && vertical;
+
+        final float DEFAULT_INC = 0.1f;
+        float incrementAmount = 0.1f;
+        maxSpeed = MAX_SPEED;
+
+
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            if(diagonal) {
+                maxSpeed *= 0.707;
+                incrementAmount = 0.05f;
+            }
             xVelocity += acceleration * delta;
             if (xVelocity > maxSpeed) {
                 xVelocity = maxSpeed;
             }
+            PointSystem.incrementPoint(incrementAmount);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            if(diagonal) {
+                maxSpeed *= 0.707;
+                incrementAmount = 0.05f;
+            }
             xVelocity -= acceleration * delta;
             if(xVelocity < -maxSpeed) {
                 xVelocity = -maxSpeed;
             }
+            PointSystem.incrementPoint(incrementAmount);
         }
         else {
             // neither are pressed
@@ -108,20 +132,30 @@ public class Player {
                 }
             }
         }
-    }
 
-    private void verticalMovement(final float delta) {
+        // Vertical movement
+
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            if(diagonal) {
+                maxSpeed *= 0.707;
+                incrementAmount = 0.05f;
+            }
             yVelocity += acceleration * delta;
             if (yVelocity > maxSpeed) {
                 yVelocity = maxSpeed;
             }
+            PointSystem.incrementPoint(incrementAmount);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            if(diagonal) {
+                maxSpeed *= 0.707;
+                incrementAmount = 0.05f;
+            }
             yVelocity -= acceleration * delta;
             if(yVelocity < -maxSpeed) {
                 yVelocity = -maxSpeed;
             }
+            PointSystem.incrementPoint(incrementAmount);
         }
         else {
             // neither are pressed
@@ -139,5 +173,4 @@ public class Player {
             }
         }
     }
-
 }
