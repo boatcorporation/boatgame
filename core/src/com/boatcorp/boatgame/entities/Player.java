@@ -81,7 +81,6 @@ public class Player {
     }
 
     private void movement(final float delta) {
-        // Horizontal movement
         boolean right = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
         boolean left = Gdx.input.isKeyPressed(Input.Keys.LEFT);
         boolean up = Gdx.input.isKeyPressed(Input.Keys.UP);
@@ -90,15 +89,14 @@ public class Player {
         boolean vertical = up || down;
         boolean diagonal = horizontal && vertical;
 
-        final float DEFAULT_INC = 0.1f;
         float incrementAmount = 0.1f;
         maxSpeed = MAX_SPEED;
 
-
+        // Horizontal movement
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             if(diagonal) {
                 maxSpeed *= 0.707;
-                incrementAmount = 0.05f;
+                incrementAmount /= 2.0f;
             }
             xVelocity += acceleration * delta;
             if (xVelocity > maxSpeed) {
@@ -109,7 +107,7 @@ public class Player {
         else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             if(diagonal) {
                 maxSpeed *= 0.707;
-                incrementAmount = 0.05f;
+                incrementAmount /= 2.0f;
             }
             xVelocity -= acceleration * delta;
             if(xVelocity < -maxSpeed) {
@@ -138,7 +136,7 @@ public class Player {
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
             if(diagonal) {
                 maxSpeed *= 0.707;
-                incrementAmount = 0.05f;
+                incrementAmount /= 2.0f;
             }
             yVelocity += acceleration * delta;
             if (yVelocity > maxSpeed) {
@@ -149,7 +147,7 @@ public class Player {
         else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             if(diagonal) {
                 maxSpeed *= 0.707;
-                incrementAmount = 0.05f;
+                incrementAmount /= 2.0f;
             }
             yVelocity -= acceleration * delta;
             if(yVelocity < -maxSpeed) {
@@ -158,7 +156,7 @@ public class Player {
             PointSystem.incrementPoint(incrementAmount);
         }
         else {
-            // neither are pressed
+            // Neither are pressed
             if(yVelocity < 0) {
                 yVelocity += 2*acceleration * delta;
                 if(yVelocity >= 0) {
