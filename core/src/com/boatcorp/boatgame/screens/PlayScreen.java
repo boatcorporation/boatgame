@@ -30,14 +30,11 @@ public class PlayScreen implements Screen {
     private final World world;
     private final Box2DDebugRenderer b2dr;
     private final OrthographicCamera camera;
-    private final Viewport viewport;
     private final Body bPlayer;
     private final MapLoader mapLoader;
     private final BitmapFont font;
-    private final PointSystem points;
     private final Texture playerTexture;
     private final Player player;
-    private final Sprite playerSprite;
 
     public PlayScreen() {
         batch = new SpriteBatch();
@@ -46,15 +43,13 @@ public class PlayScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
         camera.zoom = DEFAULT_ZOOM;
-        viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
+        Viewport viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
         mapLoader = new MapLoader(world);
         playerTexture = new Texture(Gdx.files.internal("Maps/boat1.png"));
-        playerSprite = new Sprite(playerTexture);
+        Sprite playerSprite = new Sprite(playerTexture);
         player = new Player(playerSprite, 0, 0);
         bPlayer = mapLoader.getPlayer();
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
-        points = new PointSystem();
-
     }
 
     @Override
@@ -86,7 +81,7 @@ public class PlayScreen implements Screen {
         // mFontBatch drawing
         fontBatch.begin();
         font.getData().setScale(0.5f);
-        String displayPoint = "SCORE:" + points.getPoints();
+        String displayPoint = "SCORE:" + PointSystem.getPoints();
         font.draw(fontBatch, displayPoint, 8, 472);
         fontBatch.end();
     }
