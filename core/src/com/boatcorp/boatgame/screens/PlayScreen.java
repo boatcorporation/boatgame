@@ -33,7 +33,6 @@ public class PlayScreen implements Screen {
     private final Body bPlayer;
     private final MapLoader mapLoader;
     private final BitmapFont font;
-    private final Texture playerTexture;
     private final Player player;
 
     public PlayScreen() {
@@ -45,9 +44,8 @@ public class PlayScreen implements Screen {
         camera.zoom = DEFAULT_ZOOM;
         Viewport viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
         mapLoader = new MapLoader(world);
-        playerTexture = new Texture(Gdx.files.internal("Maps/boat1.png"));
-        Sprite playerSprite = new Sprite(playerTexture);
-        player = new Player(playerSprite, 0, 0);
+
+        player = new Player(0, 0);
         bPlayer = mapLoader.getPlayer();
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
     }
@@ -67,18 +65,21 @@ public class PlayScreen implements Screen {
     }
 
     private void draw() {
-        // mBatch drawing
+        // batch drawing
+        player.batch.setProjectionMatrix(camera.combined);
         batch.setProjectionMatrix(camera.combined);
 
-
         b2dr.render(world, camera.combined);
+
         mapLoader.render(camera);
 
+        player.draw();
+
         batch.begin();
-        batch.draw(playerTexture, player.x, player.y);
+        // Empty batch
         batch.end();
 
-        // mFontBatch drawing
+        // fontBatch drawing
         fontBatch.begin();
         font.getData().setScale(0.5f);
         String displayPoint = "SCORE:" + PointSystem.getPoints();
@@ -87,6 +88,7 @@ public class PlayScreen implements Screen {
     }
 
     private void update(final float delta) {
+
         camera.position.set(player.getPosition(), 0);
         camera.update();
         world.step(delta, 6,2);
