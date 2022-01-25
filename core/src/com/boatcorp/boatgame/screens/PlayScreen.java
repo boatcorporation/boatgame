@@ -41,7 +41,7 @@ public class PlayScreen implements Screen {
         camera = new OrthographicCamera();
         camera.zoom = DEFAULT_ZOOM;
         viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
-        mapLoader = new MapLoader(world);
+        mapLoader = new MapLoader();
         playerTexture = new Texture(Gdx.files.internal("Maps/boat1.png"));
         playerSprite = new Sprite(playerTexture);
         player = new Player(playerSprite, 0, 0);
