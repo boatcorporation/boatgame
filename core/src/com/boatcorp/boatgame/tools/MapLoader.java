@@ -24,7 +24,7 @@ public class MapLoader implements Disposable {
     public MapLoader(World world) {
         this.mWorld = world;
         mMap = new TmxMapLoader().load(MAP_NAME);
-        mRenderer = new OrthogonalTiledMapRenderer(mMap, 1/16f);
+        mRenderer = new OrthogonalTiledMapRenderer(mMap, 1f);
     }
 
     public Body getPlayer() {
