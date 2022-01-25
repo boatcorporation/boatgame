@@ -1,7 +1,6 @@
 package com.boatcorp.boatgame.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,17 +8,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.boatcorp.boatgame.tools.MapLoader;
 import com.boatcorp.boatgame.frameworks.PointSystem;
-import com.boatcorp.boatgame.tools.ShapeMaker;
-import entities.Player;
+import com.boatcorp.boatgame.entities.Player;
 
 import static com.boatcorp.boatgame.screens.Constants.*;
 
@@ -30,7 +25,7 @@ public class PlayScreen implements Screen {
     private final World world;
     private final Box2DDebugRenderer b2dr;
     private final OrthographicCamera camera;
-    private final Body bPlayer;
+    private final Viewport viewport;
     private final MapLoader mapLoader;
     private final BitmapFont font;
     private final Texture playerTexture;
@@ -43,12 +38,11 @@ public class PlayScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
         camera.zoom = DEFAULT_ZOOM;
-        Viewport viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
-        mapLoader = new MapLoader(world);
+        viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
+        mapLoader = new MapLoader();
         playerTexture = new Texture(Gdx.files.internal("Maps/boat1.png"));
         Sprite playerSprite = new Sprite(playerTexture);
         player = new Player(playerSprite, 0, 0);
-        bPlayer = mapLoader.getPlayer();
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
     }
 
@@ -67,7 +61,7 @@ public class PlayScreen implements Screen {
     }
 
     private void draw() {
-        // mBatch drawing
+        // Batch drawing
         batch.setProjectionMatrix(camera.combined);
 
 
@@ -78,7 +72,7 @@ public class PlayScreen implements Screen {
         batch.draw(playerTexture, player.x, player.y);
         batch.end();
 
-        // mFontBatch drawing
+        // FontBatch drawing
         fontBatch.begin();
         font.getData().setScale(0.5f);
         String displayPoint = "SCORE:" + PointSystem.getPoints();

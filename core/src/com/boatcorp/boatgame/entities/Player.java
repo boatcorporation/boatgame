@@ -1,4 +1,4 @@
-package entities;
+package com.boatcorp.boatgame.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -7,18 +7,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.boatcorp.boatgame.frameworks.PointSystem;
 
 public class Player {
-    private Sprite sprite;
+    private final Sprite sprite;
 
     public float x;
     public float y;
-    private Vector2 position;
 
     public Player(Sprite sprite, float x, float y) {
         this.sprite = sprite;
         this.x = x;
         this.y = y;
-
-        this.position = new Vector2(this.x, this.y);
     }
 
     public Sprite getSprite() {
