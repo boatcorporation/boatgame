@@ -1,22 +1,22 @@
 package com.boatcorp.boatgame.frameworks;
 
 public class PointSystem {
-    private int points;
+    private static int points;
 
-    public PointSystem() {
-        this.points = 0;
+    public static int getPoints() {
+        return points;
     }
 
-    public int getPoints() {
-        return this.points;
+    public static void setPoints(int points) {
+        points = points;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public static void incrementPoint() {
+        points++;
     }
 
-    public void incrementPoint() {
-        this.points++;
+    public static void update(final float delta) {
+
     }
 
 }

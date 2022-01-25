@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.boatcorp.boatgame.frameworks.PointSystem;
 
 public class Player {
     private final Sprite sprite;
@@ -26,10 +27,22 @@ public class Player {
     }
 
     public void update(final float delta) {
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) this.x -= 200 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) this.x += 200 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) this.y += 200 * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) this.y -= 200 * Gdx.graphics.getDeltaTime();
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            this.x -= 200 * Gdx.graphics.getDeltaTime();
+            PointSystem.incrementPoint();
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            this.x += 200 * Gdx.graphics.getDeltaTime();
+            PointSystem.incrementPoint();
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            this.y += 200 * Gdx.graphics.getDeltaTime();
+            PointSystem.incrementPoint();
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            this.y -= 200 * Gdx.graphics.getDeltaTime();
+            PointSystem.incrementPoint();
+        }
     }
 
 }

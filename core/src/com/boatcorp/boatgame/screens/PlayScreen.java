@@ -28,10 +28,8 @@ public class PlayScreen implements Screen {
     private final Viewport viewport;
     private final MapLoader mapLoader;
     private final BitmapFont font;
-    private final PointSystem points;
     private final Texture playerTexture;
     private final Player player;
-    private final Sprite playerSprite;
 
     public PlayScreen() {
         batch = new SpriteBatch();
@@ -43,11 +41,9 @@ public class PlayScreen implements Screen {
         viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
         mapLoader = new MapLoader();
         playerTexture = new Texture(Gdx.files.internal("Maps/boat1.png"));
-        playerSprite = new Sprite(playerTexture);
+        Sprite playerSprite = new Sprite(playerTexture);
         player = new Player(playerSprite, 0, 0);
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
-        points = new PointSystem();
-
     }
 
     @Override
@@ -79,7 +75,7 @@ public class PlayScreen implements Screen {
         // FontBatch drawing
         fontBatch.begin();
         font.getData().setScale(0.5f);
-        String displayPoint = "SCORE:" + points.getPoints();
+        String displayPoint = "SCORE:" + PointSystem.getPoints();
         font.draw(fontBatch, displayPoint, 8, 472);
         fontBatch.end();
     }
