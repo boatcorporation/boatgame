@@ -1,10 +1,13 @@
 package com.boatcorp.boatgame.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -16,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.boatcorp.boatgame.tools.MapLoader;
 import com.boatcorp.boatgame.frameworks.PointSystem;
 import com.boatcorp.boatgame.tools.ShapeMaker;
+import entities.Player;
 
 import static com.boatcorp.boatgame.screens.Constants.*;
 
@@ -31,6 +35,9 @@ public class PlayScreen implements Screen {
     private final MapLoader mMapLoader;
     private final BitmapFont mFont;
     private final PointSystem mPoints;
+    private final Texture playerTexture;
+    private final Player player;
+    private final Sprite playerSprite;
 
     public PlayScreen() {
         mBatch = new SpriteBatch();
@@ -41,6 +48,9 @@ public class PlayScreen implements Screen {
         mCamera.zoom = DEFAULT_ZOOM;
         mViewport = new FitViewport(640 / PPM, 480 / PPM, mCamera);
         mMapLoader = new MapLoader(mWorld);
+        playerTexture = new Texture(Gdx.files.internal("Maps/boat1.png"));
+        playerSprite = new Sprite(playerTexture);
+        player = new Player(playerSprite, 0, 0);
         mPlayer = mMapLoader.getPlayer();
         mFont = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
         mPoints = new PointSystem();
@@ -62,24 +72,33 @@ public class PlayScreen implements Screen {
     }
 
     private void draw() {
+        // mBatch drawing
+        mBatch.setProjectionMatrix(mCamera.combined);
+
+
+        mB2dr.render(mWorld, mCamera.combined);
+        mMapLoader.render(mCamera);
+
+        mBatch.begin();
+        mBatch.draw(playerTexture, player.x, player.y);
+        mBatch.end();
+
         // mFontBatch drawing
         mFontBatch.begin();
         mFont.getData().setScale(0.5f);
         String displayPoint = "SCORE:" + mPoints.getPoints();
         mFont.draw(mFontBatch, displayPoint, 8, 472);
-
         mFontBatch.end();
-
-        // mBatch drawing
-        mBatch.setProjectionMatrix(mCamera.combined);
-        mB2dr.render(mWorld, mCamera.combined);
-        mMapLoader.render(mCamera);
     }
 
     private void update(final float delta) {
-        mCamera.position.set(mPlayer.getPosition(), 0);
+        mCamera.position.set(player.getPosition(), 0);
         mCamera.update();
         mWorld.step(delta, 6,2);
+
+        // Player updates
+        player.update(delta);
+
     }
 
     @Override
