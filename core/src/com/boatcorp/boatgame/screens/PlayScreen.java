@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -76,11 +78,58 @@ public class PlayScreen implements Screen {
         font.getData().setScale(0.5f);
         String displayPoint = "SCORE:" + PointSystem.getPoints();
         font.draw(fontBatch, displayPoint, 8, 472);
+        String coords = "X: " + player.x + " Y: " + player.y;
+        font.draw(fontBatch, coords, 8, 400);
         fontBatch.end();
     }
 
     private void update(final float delta) {
+        MapProperties prop = mapLoader.Map.getProperties();
+        int mapWidth = prop.get("width", Integer.class);
+        int mapHeight = prop.get("height", Integer.class);
+        int mapLeft = 0;
+        int mapRight = mapWidth;
+        int mapBottom = 0;
+        int mapTop = mapHeight;
+
+        float cameraHalfWidth = camera.viewportWidth * DEFAULT_ZOOM * 0.5f;
+        float cameraHalfHeight = camera.viewportHeight * DEFAULT_ZOOM * 0.5f;
+
         camera.position.set(player.getPosition(), 0);
+
+        float cameraLeft = camera.position.x - cameraHalfWidth;
+        float cameraRight = camera.position.x + cameraHalfWidth;
+        float cameraBottom = camera.position.y - cameraHalfHeight;
+        float cameraTop = camera.position.y + cameraHalfHeight;
+
+        // Horizontal axis
+        if(mapWidth < camera.viewportWidth)
+        {
+            camera.position.x = mapRight * 0.5f;
+        }
+        else if(cameraLeft <= mapLeft)
+        {
+            camera.position.x = mapLeft + cameraHalfWidth;
+        }
+        else if(cameraRight >= mapRight)
+        {
+            camera.position.x = mapRight - cameraHalfWidth;
+        }
+
+        // Vertical axis
+        if(mapHeight < camera.viewportHeight)
+        {
+            camera.position.y = mapTop * 0.5f;
+        }
+        else if(cameraBottom <= mapBottom)
+        {
+            camera.position.y = mapBottom + cameraHalfHeight;
+        }
+        else if(cameraTop >= mapTop)
+        {
+            camera.position.y = mapTop - cameraHalfHeight;
+        }
+
         camera.update();
         world.step(delta, 6,2);
 
