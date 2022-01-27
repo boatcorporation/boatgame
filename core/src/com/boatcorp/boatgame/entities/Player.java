@@ -3,6 +3,7 @@ package com.boatcorp.boatgame.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -12,10 +13,15 @@ public class Player {
     public Vector2 position = new Vector2();
     public SpriteBatch batch;
 
-    private final int RIGHT = 0;
-    private final int DOWN = 1;
+    private final int RIGHT = 1;
     private final int LEFT = 2;
     private final int UP = 3;
+    private final int DOWN = 4;
+    private final int UP_RIGHT = 5;
+    private final int UP_LEFT = 6;
+    private final int DOWN_RIGHT = 7;
+    private final int DOWN_LEFT = 8;
+
     private final float MAX_SPEED = 3f;
 
     public final Texture texture = new Texture(Gdx.files.internal("Maps/boat1.png"));
@@ -27,7 +33,7 @@ public class Player {
     public float maxSpeed = 3f;
     public float acceleration = 3f;
 
-    private int direction = UP;
+    private int direction = RIGHT;
 
     public Player(float x, float y) {
         batch = new SpriteBatch();
@@ -49,10 +55,15 @@ public class Player {
 
     public void draw() {
         batch.begin();
-        if(direction == RIGHT) sprite.setRotation(270);
-        if(direction == LEFT) sprite.setRotation(90);
+
         if(direction == UP) sprite.setRotation(0);
         if(direction == DOWN) sprite.setRotation(180);
+        if(direction == RIGHT) sprite.setRotation(270);
+        if(direction == LEFT) sprite.setRotation(90);
+        if(direction == UP_RIGHT) sprite.setRotation(330);
+        if(direction == UP_LEFT) sprite.setRotation(45);
+        if(direction == DOWN_RIGHT) sprite.setRotation(225);
+        if(direction == DOWN_LEFT) sprite.setRotation(135);
 
         sprite.setPosition(x, y);
         sprite.draw(batch);
@@ -64,16 +75,44 @@ public class Player {
         movement(delta);
 
         if(xVelocity > 0) {
-            direction = RIGHT;
+            // moving right
+            if(yVelocity > 0) {
+                // moving up
+                direction = UP_RIGHT;
+            }
+            // moving down or no angle
+            else if(yVelocity < 0) {
+                // moving down
+                direction = DOWN_RIGHT;
+            }
+            else {
+                // just right
+                direction = RIGHT;
+            }
         }
         if(xVelocity < 0) {
-            direction = LEFT;
+            // moving left
+            if(yVelocity > 0) {
+                // moving up
+                direction = UP_LEFT;
+            }
+            // moving down or no angle
+            else if(yVelocity < 0) {
+                // moving down
+                direction = DOWN_LEFT;
+            }
+            else {
+                // just left
+                direction = LEFT;
+            }
         }
-        if(yVelocity < 0) {
-            direction = DOWN;
-        }
-        if(yVelocity > 0) {
-            direction = UP;
+        if(xVelocity == 0) {
+            if(yVelocity < 0) {
+                direction = DOWN;
+            }
+            else {
+                direction = UP;
+            }
         }
 
         x = x + xVelocity;
@@ -85,18 +124,20 @@ public class Player {
         boolean left = Gdx.input.isKeyPressed(Input.Keys.LEFT);
         boolean up = Gdx.input.isKeyPressed(Input.Keys.UP);
         boolean down = Gdx.input.isKeyPressed(Input.Keys.DOWN);
+
         boolean horizontal = right || left;
         boolean vertical = up || down;
         boolean diagonal = horizontal && vertical;
 
         float incrementAmount = 0.1f;
+        float diagConstant = 0.7071f;
         maxSpeed = MAX_SPEED;
 
         // Horizontal movement
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if(right) {
             if(diagonal) {
-                maxSpeed *= 0.707;
-                incrementAmount /= 2.0f;
+                maxSpeed *= diagConstant;
+                incrementAmount *= 0.5f;
             }
             xVelocity += acceleration * delta;
             if (xVelocity > maxSpeed) {
@@ -104,10 +145,10 @@ public class Player {
             }
             PointSystem.incrementPoint(incrementAmount);
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        else if(left) {
             if(diagonal) {
-                maxSpeed *= 0.707;
-                incrementAmount /= 2.0f;
+                maxSpeed *= diagConstant;
+                incrementAmount *= 0.5f;
             }
             xVelocity -= acceleration * delta;
             if(xVelocity < -maxSpeed) {
@@ -133,10 +174,10 @@ public class Player {
 
         // Vertical movement
 
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if(up) {
             if(diagonal) {
-                maxSpeed *= 0.707;
-                incrementAmount /= 2.0f;
+                maxSpeed *= diagConstant;
+                incrementAmount *= 0.5f;
             }
             yVelocity += acceleration * delta;
             if (yVelocity > maxSpeed) {
@@ -144,10 +185,10 @@ public class Player {
             }
             PointSystem.incrementPoint(incrementAmount);
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        else if(down) {
             if(diagonal) {
-                maxSpeed *= 0.707;
-                incrementAmount /= 2.0f;
+                maxSpeed *= diagConstant;
+                incrementAmount *= 0.5f;
             }
             yVelocity -= acceleration * delta;
             if(yVelocity < -maxSpeed) {
@@ -170,5 +211,9 @@ public class Player {
                 }
             }
         }
+    }
+
+    public void dispose() {
+        batch.dispose();
     }
 }

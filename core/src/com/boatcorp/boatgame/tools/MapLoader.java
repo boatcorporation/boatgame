@@ -10,7 +10,7 @@ import static com.boatcorp.boatgame.screens.Constants.MAP_NAME;
 
 public class MapLoader implements Disposable {
 
-    private final TiledMap Map;
+    public final TiledMap Map;
     private final OrthogonalTiledMapRenderer Renderer;
 
     public MapLoader() {

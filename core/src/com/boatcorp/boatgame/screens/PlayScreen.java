@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -26,6 +28,7 @@ public class PlayScreen implements Screen {
     private final MapLoader mapLoader;
     private final BitmapFont font;
     private final Player player;
+    private final Viewport viewport;
 
     public PlayScreen() {
         batch = new SpriteBatch();
@@ -33,10 +36,8 @@ public class PlayScreen implements Screen {
         world = new World(GRAVITY, true);
         b2dr = new Box2DDebugRenderer();
         camera = new OrthographicCamera();
-        camera.zoom = DEFAULT_ZOOM;
-        Viewport viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
+        viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
         mapLoader = new MapLoader();
-
         player = new Player(0, 0);
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
     }
@@ -60,7 +61,6 @@ public class PlayScreen implements Screen {
         player.batch.setProjectionMatrix(camera.combined);
         batch.setProjectionMatrix(camera.combined);
 
-
         b2dr.render(world, camera.combined);
 
         mapLoader.render(camera);
@@ -76,17 +76,40 @@ public class PlayScreen implements Screen {
         font.getData().setScale(0.5f);
         String displayPoint = "SCORE:" + PointSystem.getPoints();
         font.draw(fontBatch, displayPoint, 8, 472);
+
+        // USEFUL FOR DEBUGGING
+        String coords = "X: " + player.x + " Y: " + player.y;
+        String cameracoords = "X :" + camera.position.x + "Y: " + camera.position.y;
+        font.draw(fontBatch, coords, 8, 440);
+        font.draw(fontBatch, cameracoords, 8, 400);
         fontBatch.end();
     }
 
     private void update(final float delta) {
-        camera.position.set(player.getPosition(), 0);
+        camera.zoom = DEFAULT_ZOOM;
+
+        // Get properties of the map from the TileMap
+        MapProperties prop = mapLoader.Map.getProperties();
+        int mapWidth = prop.get("width", Integer.class);
+        int mapHeight = prop.get("height", Integer.class);
+
+        // Using `lerping` to slightly lag camera behind player
+        float lerp = 5f;
+        camera.position.x += (player.x - camera.position.x) * lerp * delta;
+        camera.position.y += (player.y - camera.position.y) * lerp * delta;
+
+        float vw = camera.viewportWidth * camera.zoom;
+        float vh = camera.viewportHeight * camera.zoom;
+
+        // clamp the camera position to the size of the map
+        camera.position.x = MathUtils.clamp(camera.position.x, vw / 2f, mapWidth * PPM / 2f);
+        camera.position.y = MathUtils.clamp(camera.position.y, vh / 2f, mapHeight * PPM / 2f);
+
         camera.update();
+
         world.step(delta, 6,2);
 
-        // Player updates
         player.update(delta);
-
     }
 
     @Override
