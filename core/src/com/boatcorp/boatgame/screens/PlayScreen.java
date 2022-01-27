@@ -8,13 +8,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.boatcorp.boatgame.entities.College;
 import com.boatcorp.boatgame.entities.Player;
 import com.boatcorp.boatgame.frameworks.PointSystem;
 import com.boatcorp.boatgame.tools.MapLoader;
+
+import java.util.ArrayList;
 
 import static com.boatcorp.boatgame.screens.Constants.*;
 
@@ -25,10 +29,12 @@ public class PlayScreen implements Screen {
     private final World world;
     private final Box2DDebugRenderer b2dr;
     private final OrthographicCamera camera;
+    private final Viewport viewport;
     private final MapLoader mapLoader;
     private final BitmapFont font;
     private final Player player;
-    private final Viewport viewport;
+    private final ArrayList<College> colleges;
+
 
     public PlayScreen() {
         batch = new SpriteBatch();
@@ -38,8 +44,16 @@ public class PlayScreen implements Screen {
         camera = new OrthographicCamera();
         viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
         mapLoader = new MapLoader();
-        player = new Player(0, 0);
+        player = new Player();
+        colleges = new ArrayList<>();
+        colleges.add(new College("langwith"));
+        colleges.add(new College("james"));
+        collegeSpread();
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
+    }
+
+    private void collegeSpread() {
+        // TODO: Implement function
     }
 
     @Override
@@ -58,14 +72,21 @@ public class PlayScreen implements Screen {
 
     private void draw() {
         // Batch drawing
-        player.batch.setProjectionMatrix(camera.combined);
+        player.setMatrix(camera.combined);
+        for (College college : colleges) {
+            college.setMatrix(camera.combined);
+        }
         batch.setProjectionMatrix(camera.combined);
 
         b2dr.render(world, camera.combined);
 
         mapLoader.render(camera);
 
+        for (College college : colleges) {
+            college.draw();
+        }
         player.draw();
+
 
         batch.begin();
         // Empty batch
@@ -78,7 +99,8 @@ public class PlayScreen implements Screen {
         font.draw(fontBatch, displayPoint, 8, 472);
 
         // USEFUL FOR DEBUGGING
-        String coords = "X: " + player.x + " Y: " + player.y;
+        Vector2 playerPos = player.getPosition();
+        String coords = "X: " + playerPos.x + " Y: " + playerPos.y;
         String cameracoords = "X :" + camera.position.x + "Y: " + camera.position.y;
         font.draw(fontBatch, coords, 8, 440);
         font.draw(fontBatch, cameracoords, 8, 400);
@@ -95,8 +117,9 @@ public class PlayScreen implements Screen {
 
         // Using `lerping` to slightly lag camera behind player
         float lerp = 5f;
-        camera.position.x += (player.x - camera.position.x) * lerp * delta;
-        camera.position.y += (player.y - camera.position.y) * lerp * delta;
+        Vector2 playerPos = player.getPosition();
+        camera.position.x += (playerPos.x - camera.position.x) * lerp * delta;
+        camera.position.y += (playerPos.y - camera.position.y) * lerp * delta;
 
         float vw = camera.viewportWidth * camera.zoom;
         float vh = camera.viewportHeight * camera.zoom;
@@ -139,5 +162,9 @@ public class PlayScreen implements Screen {
         world.dispose();
         b2dr.dispose();
         mapLoader.dispose();
+        player.dispose();
+        for (College college : colleges) {
+            college.dispose();
+        }
     }
 }

@@ -3,15 +3,14 @@ package com.boatcorp.boatgame.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.boatcorp.boatgame.frameworks.PointSystem;
 
 public class Player {
-    public Vector2 position = new Vector2();
-    public SpriteBatch batch;
+    private final SpriteBatch batch;
 
     private final int RIGHT = 1;
     private final int LEFT = 2;
@@ -24,25 +23,21 @@ public class Player {
 
     private final float MAX_SPEED = 3f;
 
-    public final Texture texture = new Texture(Gdx.files.internal("Maps/boat1.png"));
+    private final Texture texture = new Texture(Gdx.files.internal("Entities/boat1.png"));
     private final Sprite sprite;
-    public float x;
-    public float y;
-    public float xVelocity = 0.0f;
-    public float yVelocity = 0.f;
-    public float maxSpeed = 3f;
-    public float acceleration = 3f;
+    private float x;
+    private float y;
+    private float xVelocity = 0.0f;
+    private float yVelocity = 0.f;
+    private float maxSpeed = 3f;
+    private final float acceleration = 3f;
 
     private int direction = RIGHT;
 
-    public Player(float x, float y) {
+    public Player() {
         batch = new SpriteBatch();
-
-
         sprite = new Sprite(texture);
 
-        position.x = x;
-        position.y = y;
     }
 
     public Sprite getSprite() {
@@ -213,7 +208,12 @@ public class Player {
         }
     }
 
+    public void setMatrix(Matrix4 combined) {
+        batch.setProjectionMatrix(combined);
+    }
+
     public void dispose() {
         batch.dispose();
     }
+
 }
