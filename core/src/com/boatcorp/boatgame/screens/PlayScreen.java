@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.boatcorp.boatgame.entities.Bullet;
 import com.boatcorp.boatgame.entities.College;
 import com.boatcorp.boatgame.entities.Player;
 import com.boatcorp.boatgame.frameworks.PointSystem;
@@ -84,8 +85,10 @@ public class PlayScreen implements Screen {
 
         for (College college : colleges) {
             college.draw();
+            college.combat(player.getPosition(), camera.combined);
         }
         player.draw();
+
 
 
         batch.begin();
@@ -99,11 +102,13 @@ public class PlayScreen implements Screen {
         font.draw(fontBatch, displayPoint, 8, 472);
 
         // USEFUL FOR DEBUGGING
+        /*
         Vector2 playerPos = player.getPosition();
         String coords = "X: " + playerPos.x + " Y: " + playerPos.y;
         String cameracoords = "X :" + camera.position.x + "Y: " + camera.position.y;
         font.draw(fontBatch, coords, 8, 440);
         font.draw(fontBatch, cameracoords, 8, 400);
+        */
         fontBatch.end();
     }
 
