@@ -15,12 +15,16 @@ public class Bullet {
     private final SpriteBatch batch;
     private final Sprite sprite;
     private Vector2 position;
+    private final Vector2 startPos;
+    private final Vector2 velocity;
 
-    public Bullet(Vector2 position) {
+    public Bullet(Vector2 position, Vector2 velocity) {
         final Texture texture = new Texture(Gdx.files.internal(BULLET_PATH));
         batch = new SpriteBatch();
         sprite = new Sprite(texture);
         this.position = position;
+        startPos = getPosition();
+        this.velocity = velocity;
     }
 
     public void draw() {
@@ -38,9 +42,20 @@ public class Bullet {
         position.y = pos.y;
     }
 
+    public Vector2 getVelocity() {
+        return velocity.cpy();
+    }
+
+    public boolean outOfRange() {
+        double distance = Math.hypot(position.x - startPos.x, position.y - startPos.y);
+        return (distance > 300);
+    }
+
     public void move() {
         Vector2 currentPos = this.getPosition();
-        currentPos.x += 5;
+        Vector2 v = this.getVelocity();
+        currentPos.x += v.x;
+        currentPos.y += v.y;
         this.setPosition(currentPos);
     }
 

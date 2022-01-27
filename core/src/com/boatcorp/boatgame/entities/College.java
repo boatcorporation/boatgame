@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -16,6 +17,8 @@ public class College {
     private final Sprite sprite;
     private Vector2 position;
     private ArrayList<Bullet> bullets;
+    private ArrayList<Vector2> diagonalDirections = new ArrayList<>();
+    private ArrayList<Vector2> cardinalDirections = new ArrayList<>();
 
     public College(String college) {
         final String PATH_NAME = "Entities/" + college + ".png";
@@ -25,6 +28,17 @@ public class College {
         bullets = new ArrayList<>();
         Random rand = new Random();
         position = new Vector2(rand.nextInt(1200), rand.nextInt(1200));
+
+        cardinalDirections.add(new Vector2(5,0));
+        cardinalDirections.add(new Vector2(-5,0));
+        cardinalDirections.add(new Vector2(0,5));
+        cardinalDirections.add(new Vector2(0,-5));
+
+        diagonalDirections.add(new Vector2(4,4));
+        diagonalDirections.add(new Vector2(4,4));
+        diagonalDirections.add(new Vector2(4,-4));
+        diagonalDirections.add(new Vector2(-4,4));
+        diagonalDirections.add(new Vector2(-4,-4));
     }
 
     public Vector2 getPosition() {
@@ -37,13 +51,23 @@ public class College {
 
     public void combat(@NotNull Vector2 playerPos, Matrix4 camera) {
         double distance = Math.hypot(position.x - playerPos.x, position.y - playerPos.y);
+        Random rand = new Random();
+        ArrayList<Vector2> randDir;
+        randDir = (rand.nextBoolean()) ? diagonalDirections: cardinalDirections;
         if (distance < 200) {
-            if (bullets.isEmpty()) { bullets.add(new Bullet(this.getPosition())); }
+            if (bullets.isEmpty()) {
+                for (Vector2 direction : randDir) {
+                    bullets.add(new Bullet(this.getPosition(), direction));
+                }
+            }
             for (int i = 0; i < bullets.size(); i++) {
                 Bullet bullet = bullets.get(i);
                 bullet.setMatrix(camera);
                 bullet.draw();
                 bullet.move();
+                if (bullet.outOfRange()) {
+                    bullets.remove(bullet);
+                }
             }
         }
     }
