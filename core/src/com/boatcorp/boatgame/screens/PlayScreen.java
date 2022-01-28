@@ -13,9 +13,9 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.boatcorp.boatgame.entities.Bullet;
 import com.boatcorp.boatgame.entities.College;
 import com.boatcorp.boatgame.entities.Player;
+import com.boatcorp.boatgame.frameworks.HealthBar;
 import com.boatcorp.boatgame.frameworks.PointSystem;
 import com.boatcorp.boatgame.tools.MapLoader;
 
@@ -35,6 +35,7 @@ public class PlayScreen implements Screen {
     private final BitmapFont font;
     private final Player player;
     private final ArrayList<College> colleges;
+    private final HealthBar playerHealth;
 
 
     public PlayScreen() {
@@ -50,6 +51,7 @@ public class PlayScreen implements Screen {
         colleges.add(new College("langwith"));
         colleges.add(new College("james"));
         collegeSpread();
+        playerHealth = new HealthBar();
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
     }
 
@@ -88,7 +90,7 @@ public class PlayScreen implements Screen {
             college.combat(player.getPosition(), camera.combined);
         }
         player.draw();
-
+        playerHealth.draw(new Vector2(Gdx.graphics.getWidth() / 2f - 60f, 5),100, 100);
 
 
         batch.begin();
@@ -141,9 +143,7 @@ public class PlayScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-        camera.setToOrtho(false,(float)width/16,(float)height/16);
-    }
+    public void resize(int width, int height) { camera.setToOrtho(false,(float)width/16,(float)height/16); }
 
     @Override
     public void pause() {
