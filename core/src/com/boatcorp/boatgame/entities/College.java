@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.boatcorp.boatgame.frameworks.HealthBar;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
@@ -17,8 +18,11 @@ public class College {
     private final Sprite sprite;
     private Vector2 position;
     private ArrayList<Bullet> bullets;
-    private ArrayList<Vector2> diagonalDirections = new ArrayList<>();
-    private ArrayList<Vector2> cardinalDirections = new ArrayList<>();
+    private final ArrayList<Vector2> diagonalDirections = new ArrayList<>();
+    private final ArrayList<Vector2> cardinalDirections = new ArrayList<>();
+    private final HealthBar health;
+    private final float maxHealth;
+    private float currentHealth;
 
     public College(String college) {
         final String PATH_NAME = "Entities/" + college + ".png";
@@ -28,6 +32,9 @@ public class College {
         bullets = new ArrayList<>();
         Random rand = new Random();
         position = new Vector2(rand.nextInt(1200), rand.nextInt(1200));
+        health = new HealthBar();
+        maxHealth = 100;
+        currentHealth = 100;
 
         cardinalDirections.add(new Vector2(5,0));
         cardinalDirections.add(new Vector2(-5,0));
@@ -77,14 +84,18 @@ public class College {
         sprite.setPosition(position.x, position.y);
         sprite.draw(batch);
         batch.end();
+        Vector2 currentPos = this.getPosition();
+        health.draw(new Vector2(currentPos.x - 9.5f, currentPos.y - 5), maxHealth, currentHealth, 0.5f);
     }
 
     public void setMatrix(Matrix4 combined) {
         batch.setProjectionMatrix(combined);
+        health.setMatrix(combined);
     }
 
     public void dispose() {
         batch.dispose();
+        health.dispose();
         if (!(bullets.isEmpty())) {
             for (Bullet bullet : bullets) {
                 bullet.dispose();

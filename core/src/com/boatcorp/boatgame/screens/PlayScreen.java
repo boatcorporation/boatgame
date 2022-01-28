@@ -35,7 +35,6 @@ public class PlayScreen implements Screen {
     private final BitmapFont font;
     private final Player player;
     private final ArrayList<College> colleges;
-    private final HealthBar playerHealth;
 
 
     public PlayScreen() {
@@ -51,7 +50,6 @@ public class PlayScreen implements Screen {
         colleges.add(new College("langwith"));
         colleges.add(new College("james"));
         collegeSpread();
-        playerHealth = new HealthBar();
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
     }
 
@@ -90,7 +88,6 @@ public class PlayScreen implements Screen {
             college.combat(player.getPosition(), camera.combined);
         }
         player.draw();
-        playerHealth.draw(new Vector2(Gdx.graphics.getWidth() / 2f - 60f, 5),100, 100);
 
 
         batch.begin();

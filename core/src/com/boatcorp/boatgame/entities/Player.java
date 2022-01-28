@@ -7,10 +7,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.boatcorp.boatgame.frameworks.HealthBar;
 import com.boatcorp.boatgame.frameworks.PointSystem;
 
 public class Player {
     private final SpriteBatch batch;
+    private final Texture texture = new Texture(Gdx.files.internal("Entities/boat1.png"));
+    private final Sprite sprite;
+    private final HealthBar health;
+    private final float maxHealth;
+    private float currentHealth;
 
     private final int RIGHT = 1;
     private final int LEFT = 2;
@@ -20,11 +26,10 @@ public class Player {
     private final int UP_LEFT = 6;
     private final int DOWN_RIGHT = 7;
     private final int DOWN_LEFT = 8;
-
+    private int direction = RIGHT;
     private final float MAX_SPEED = 3f;
 
-    private final Texture texture = new Texture(Gdx.files.internal("Entities/boat1.png"));
-    private final Sprite sprite;
+
     private float x;
     private float y;
     private float xVelocity = 0.0f;
@@ -32,12 +37,14 @@ public class Player {
     private float maxSpeed = 3f;
     private final float acceleration = 3f;
 
-    private int direction = RIGHT;
+
 
     public Player() {
         batch = new SpriteBatch();
         sprite = new Sprite(texture);
-
+        health = new HealthBar();
+        maxHealth = 100;
+        currentHealth = 100;
     }
 
     public Sprite getSprite() {
@@ -64,6 +71,8 @@ public class Player {
         sprite.draw(batch);
 
         batch.end();
+
+        health.draw(new Vector2(8, 440), maxHealth, currentHealth, 2);
     }
 
     public void update (final float delta) {
@@ -213,6 +222,7 @@ public class Player {
     }
 
     public void dispose() {
+        health.dispose();
         batch.dispose();
     }
 
