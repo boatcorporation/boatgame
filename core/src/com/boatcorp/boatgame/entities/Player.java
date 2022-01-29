@@ -217,6 +217,10 @@ public class Player {
         }
     }
 
+    public float getHealth() {
+        return currentHealth;
+    }
+
     public void takeDamage(int damage) {
         if (currentHealth > 0) {
             currentHealth -= damage;

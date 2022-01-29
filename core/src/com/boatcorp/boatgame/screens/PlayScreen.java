@@ -1,5 +1,6 @@
 package com.boatcorp.boatgame.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -15,7 +16,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.boatcorp.boatgame.entities.College;
 import com.boatcorp.boatgame.entities.Player;
-import com.boatcorp.boatgame.frameworks.HealthBar;
 import com.boatcorp.boatgame.frameworks.PointSystem;
 import com.boatcorp.boatgame.tools.MapLoader;
 
@@ -25,6 +25,7 @@ import static com.boatcorp.boatgame.screens.Constants.*;
 
 public class PlayScreen implements Screen {
 
+    private final Game boatGame;
     private final SpriteBatch batch;
     private final SpriteBatch fontBatch;
     private final World world;
@@ -37,7 +38,8 @@ public class PlayScreen implements Screen {
     private final ArrayList<College> colleges;
 
 
-    public PlayScreen() {
+    public PlayScreen(Game game) {
+        this.boatGame = game;
         batch = new SpriteBatch();
         fontBatch = new SpriteBatch();
         world = new World(GRAVITY, true);
@@ -66,6 +68,10 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (player.getHealth() <= 0) {
+            boatGame.setScreen(new resultScreen(false, boatGame));
+        }
 
         update(delta);
         draw();
@@ -159,6 +165,7 @@ public class PlayScreen implements Screen {
     public void dispose() {
         batch.dispose();
         fontBatch.dispose();
+        font.dispose();
         world.dispose();
         b2dr.dispose();
         mapLoader.dispose();

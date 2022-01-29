@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.boatcorp.boatgame.frameworks.HealthBar;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
