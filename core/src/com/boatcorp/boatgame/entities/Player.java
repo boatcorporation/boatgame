@@ -217,6 +217,12 @@ public class Player {
         }
     }
 
+    public void takeDamage(int damage) {
+        if (currentHealth > 0) {
+            currentHealth -= damage;
+        }
+    }
+
     public void setMatrix(Matrix4 combined) {
         batch.setProjectionMatrix(combined);
     }
@@ -225,5 +231,4 @@ public class Player {
         health.dispose();
         batch.dispose();
     }
-
 }

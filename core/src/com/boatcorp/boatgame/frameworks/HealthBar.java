@@ -20,6 +20,8 @@ public class HealthBar {
     public void draw(@NotNull Vector2 position, float maxHealth, float currentHealth, float scale) {
         float x = position.x;
         float y = position.y;
+
+        // Draws red health bar to a length in ratio with the current health
         health.begin(ShapeRenderer.ShapeType.Line);
 
         int lineWidth = 20;
@@ -29,6 +31,7 @@ public class HealthBar {
         health.line(x, y, x + scale*(maxHealth * currentHealth/maxHealth), y);
         health.end();
 
+        // Draws border around maximum length of the health bar
         border.begin(ShapeRenderer.ShapeType.Line);
 
         int borderWidth = 4;

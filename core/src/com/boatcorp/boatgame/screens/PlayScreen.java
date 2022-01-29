@@ -78,14 +78,12 @@ public class PlayScreen implements Screen {
             college.setMatrix(camera.combined);
         }
         batch.setProjectionMatrix(camera.combined);
-
         b2dr.render(world, camera.combined);
-
         mapLoader.render(camera);
 
         for (College college : colleges) {
             college.draw();
-            college.combat(player.getPosition(), camera.combined);
+            college.combat(player.getPosition(), camera.combined, player);
         }
         player.draw();
 

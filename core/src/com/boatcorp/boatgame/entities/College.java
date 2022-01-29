@@ -51,29 +51,36 @@ public class College {
     public Vector2 getPosition() {
         return position.cpy();
     }
+
     public void setPosition(@NotNull Vector2 pos) {
         position.x = pos.x;
         position.y = pos.y;
     }
 
-    public void combat(@NotNull Vector2 playerPos, Matrix4 camera) {
+    public void combat(@NotNull Vector2 playerPos, Matrix4 camera, Player player) {
         double distance = Math.hypot(position.x - playerPos.x, position.y - playerPos.y);
         Random rand = new Random();
         ArrayList<Vector2> randDir;
-        randDir = (rand.nextBoolean()) ? diagonalDirections: cardinalDirections;
+
+        // Only begins combat when the player is close enough
         if (distance < 200) {
             if (bullets.isEmpty()) {
+                // Randomly choose from set attack patterns
+                randDir = (rand.nextBoolean()) ? diagonalDirections: cardinalDirections;
                 for (Vector2 direction : randDir) {
                     bullets.add(new Bullet(this.getPosition(), direction));
                 }
             }
             for (int i = 0; i < bullets.size(); i++) {
+                // Draw and move bullets and check for collisions
                 Bullet bullet = bullets.get(i);
                 bullet.setMatrix(camera);
                 bullet.draw();
                 bullet.move();
-                if (bullet.outOfRange()) {
+                if (bullet.outOfRange(300)) { bullets.remove(bullet); }
+                if (bullet.hitPlayer(player)) {
                     bullets.remove(bullet);
+                    player.takeDamage(5);
                 }
             }
         }

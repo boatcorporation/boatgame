@@ -37,6 +37,7 @@ public class Bullet {
     public Vector2 getPosition() {
         return position.cpy();
     }
+
     public void setPosition(@NotNull Vector2 pos) {
         position.x = pos.x;
         position.y = pos.y;
@@ -46,9 +47,22 @@ public class Bullet {
         return velocity.cpy();
     }
 
-    public boolean outOfRange() {
+    public boolean outOfRange(int range) {
+        // Returns true if bullet has travelled more than 300 units
         double distance = Math.hypot(position.x - startPos.x, position.y - startPos.y);
-        return (distance > 300);
+        return (distance > range);
+    }
+
+    public boolean hitPlayer(@NotNull Player player) {
+        Vector2 targetPos = player.getPosition();
+        Vector2 currentPos = this.getPosition();
+        // Centre hitbox
+        targetPos.x += 10;
+        targetPos.y += 10;
+
+        // Return true if bullet has collided with player
+        double distance = Math.hypot(currentPos.x - targetPos.x, currentPos.y - targetPos.y);
+        return (distance < 16);
     }
 
     public void move() {
