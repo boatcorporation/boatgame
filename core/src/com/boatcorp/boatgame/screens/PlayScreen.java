@@ -1,5 +1,6 @@
 package com.boatcorp.boatgame.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,6 +25,7 @@ import static com.boatcorp.boatgame.screens.Constants.*;
 
 public class PlayScreen implements Screen {
 
+    private final Game boatGame;
     private final SpriteBatch batch;
     private final SpriteBatch fontBatch;
     private final World world;
@@ -36,7 +38,8 @@ public class PlayScreen implements Screen {
     private final ArrayList<College> colleges;
 
 
-    public PlayScreen() {
+    public PlayScreen(Game game) {
+        this.boatGame = game;
         batch = new SpriteBatch();
         fontBatch = new SpriteBatch();
         world = new World(GRAVITY, true);
@@ -66,6 +69,10 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        if (player.getHealth() <= 0) {
+            boatGame.setScreen(new resultScreen(false, boatGame));
+        }
+
         update(delta);
         draw();
     }
@@ -77,13 +84,12 @@ public class PlayScreen implements Screen {
             college.setMatrix(camera.combined);
         }
         batch.setProjectionMatrix(camera.combined);
-
         b2dr.render(world, camera.combined);
-
         mapLoader.render(camera);
 
         for (College college : colleges) {
             college.draw();
+            college.combat(player.getPosition(), camera.combined, player);
         }
         player.draw();
 
@@ -99,11 +105,13 @@ public class PlayScreen implements Screen {
         font.draw(fontBatch, displayPoint, 8, 472);
 
         // USEFUL FOR DEBUGGING
+        /*
         Vector2 playerPos = player.getPosition();
         String coords = "X: " + playerPos.x + " Y: " + playerPos.y;
         String cameracoords = "X :" + camera.position.x + "Y: " + camera.position.y;
         font.draw(fontBatch, coords, 8, 440);
         font.draw(fontBatch, cameracoords, 8, 400);
+        */
         fontBatch.end();
     }
 
@@ -136,9 +144,7 @@ public class PlayScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-        camera.setToOrtho(false,(float)width/16,(float)height/16);
-    }
+    public void resize(int width, int height) { camera.setToOrtho(false,(float)width/16,(float)height/16); }
 
     @Override
     public void pause() {
@@ -159,6 +165,7 @@ public class PlayScreen implements Screen {
     public void dispose() {
         batch.dispose();
         fontBatch.dispose();
+        font.dispose();
         world.dispose();
         b2dr.dispose();
         mapLoader.dispose();
