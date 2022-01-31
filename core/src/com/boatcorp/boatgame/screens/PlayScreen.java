@@ -51,6 +51,7 @@ public class PlayScreen implements Screen {
         colleges = new ArrayList<>();
         colleges.add(new College("langwith"));
         colleges.add(new College("james"));
+        colleges.add(new College("goodricke"));
         collegeSpread();
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
     }
@@ -69,12 +70,27 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (player.getHealth() <= 0) {
-            boatGame.setScreen(new resultScreen(false, boatGame));
-        }
-
         update(delta);
         draw();
+        combat();
+    }
+
+    private void combat() {
+        if (player.getHealth() <= 0) {
+            boatGame.setScreen(new resultScreen(false, boatGame, this));
+        }
+        if (colleges.isEmpty()) {
+            boatGame.setScreen(new resultScreen(true, boatGame, this));
+        }
+        for (int i = 0; i < colleges.size(); i++) {
+            College college = colleges.get(i);
+            if (college.isAlive()) {
+                college.combat(player.getPosition(), camera.combined, player);
+            } else {
+                colleges.remove(college);
+            }
+        }
+        player.combat(camera.combined, colleges);
     }
 
     private void draw() {
@@ -89,7 +105,6 @@ public class PlayScreen implements Screen {
 
         for (College college : colleges) {
             college.draw();
-            college.combat(player.getPosition(), camera.combined, player);
         }
         player.draw();
 
