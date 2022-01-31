@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -47,7 +48,7 @@ public class PlayScreen implements Screen {
         camera = new OrthographicCamera();
         viewport = new FitViewport(640 / PPM, 480 / PPM, camera);
         mapLoader = new MapLoader();
-        player = new Player();
+        player = new Player(camera);
         colleges = new ArrayList<>();
         colleges.add(new College("langwith"));
         colleges.add(new College("james"));
@@ -69,6 +70,7 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
         update(delta);
         draw();

@@ -2,13 +2,17 @@ package com.boatcorp.boatgame.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.boatcorp.boatgame.BoatGame;
 import com.boatcorp.boatgame.frameworks.HealthBar;
 import com.boatcorp.boatgame.frameworks.PointSystem;
+import com.boatcorp.boatgame.screens.PlayScreen;
 
 import java.util.ArrayList;
 
@@ -20,6 +24,7 @@ public class Player {
     private final float maxHealth;
     private float currentHealth;
     private ArrayList<Bullet> bullets;
+    private final OrthographicCamera cam;
 
     private final int RIGHT = 1;
     private final int LEFT = 2;
@@ -42,13 +47,14 @@ public class Player {
 
 
 
-    public Player() {
+    public Player(OrthographicCamera camera) {
         batch = new SpriteBatch();
         sprite = new Sprite(texture);
         health = new HealthBar();
         bullets = new ArrayList<>();
         maxHealth = 100;
         currentHealth = 100;
+        cam = camera;
     }
 
     public Vector2 getPosition() {
@@ -230,23 +236,21 @@ public class Player {
     }
 
     public void combat(Matrix4 camera, ArrayList<College> colleges) {
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || !bullets.isEmpty()) {
+        if (Gdx.input.isTouched() || !bullets.isEmpty()) {
             if (bullets.isEmpty()) {
+                Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                cam.unproject(mousePosition);
+                float velX = mousePosition.x - x;
+                float velY = mousePosition.y - y;
+                float length = (float) Math.sqrt(velX * velX + velY * velY);
+                if (length != 0) {
+                    velX = velX * 10 / length;
+                    velY = velY * 10 / length;
+                }
                 Vector2 adjustedPos = this.getPosition().add(10,10);
-                Vector2 bulletVelocity = this.getVelocity();
-                int xSign = (int) Math.signum(bulletVelocity.x);
-                int ySign = (int) Math.signum(bulletVelocity.y);
+                Vector2 bulletVelocity = new Vector2(velX, velY);
 
                 // Sets bullet velocity to current velocity of boat x2, ensuring no division by zero errors
-                if (bulletVelocity.isZero()) {
-                    bulletVelocity.add(0,5); // Default direction
-                } else if (bulletVelocity.x == 0) {
-                    bulletVelocity.scl(1, (5/bulletVelocity.y) * ySign);
-                } else if (bulletVelocity.y == 0)  {
-                    bulletVelocity.scl((5/bulletVelocity.x) * xSign, 1);
-                } else {
-                    bulletVelocity.scl((5/bulletVelocity.x) * xSign, (5/bulletVelocity.y) * ySign);
-                }
 
                 bullets.add(new Bullet(adjustedPos, bulletVelocity));
             }
