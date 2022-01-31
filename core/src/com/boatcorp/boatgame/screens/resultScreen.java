@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.boatcorp.boatgame.frameworks.PointSystem;
 import org.jetbrains.annotations.NotNull;
 
 public class resultScreen implements Screen {
@@ -43,13 +44,14 @@ public class resultScreen implements Screen {
         fontBatch.begin();
         font.getData().setScale(0.5f);
         font.draw(fontBatch, this.victory, WORLD_HEIGHT / 2f, WORLD_HEIGHT / (4f/3f));
-        font.draw(fontBatch, "Press Any Button", WORLD_HEIGHT / 3f, WORLD_HEIGHT / 4f);
+        font.draw(fontBatch, "Press Enter", WORLD_HEIGHT / 3f, WORLD_HEIGHT / 4f);
         fontBatch.end();
         checkInputs();
     }
 
     private void checkInputs() {
-        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY) ) {
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER) ) {
+            PointSystem.setPoints(0);
             boatGame.setScreen(new PlayScreen(boatGame));
         }
 

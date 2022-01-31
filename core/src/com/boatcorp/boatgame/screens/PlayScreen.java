@@ -90,12 +90,16 @@ public class PlayScreen implements Screen {
                 college.combat(player.getPosition(), camera.combined, player);
             } else {
                 colleges.remove(college);
+                PointSystem.incrementPoint(500);
             }
         }
         player.combat(camera.combined, colleges);
     }
 
     private void draw() {
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         // Batch drawing
         player.setMatrix(camera.combined);
         for (College college : colleges) {
@@ -119,7 +123,7 @@ public class PlayScreen implements Screen {
         fontBatch.begin();
         font.getData().setScale(0.5f);
         String displayPoint = "SCORE:" + PointSystem.getPoints();
-        font.draw(fontBatch, displayPoint, 8, 472);
+        font.draw(fontBatch, displayPoint, 8, 50);
 
         // USEFUL FOR DEBUGGING
         /*
