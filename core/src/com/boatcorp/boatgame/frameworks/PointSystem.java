@@ -7,8 +7,8 @@ public class PointSystem {
         return (int)points;
     }
 
-    public static void setPoints(int points) {
-        points = points;
+    public static void setPoints(int newPoints) {
+        points = newPoints;
     }
 
     public static void incrementPoint() {

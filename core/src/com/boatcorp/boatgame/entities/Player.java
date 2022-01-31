@@ -78,7 +78,7 @@ public class Player {
 
         batch.end();
 
-        health.draw(new Vector2(8, 440), maxHealth, currentHealth, 2);
+        health.draw(new Vector2(8, 20), maxHealth, currentHealth, 2);
     }
 
     public void update (final float delta) {
