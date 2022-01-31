@@ -43,8 +43,8 @@ public class resultScreen implements Screen {
 
         fontBatch.begin();
         font.getData().setScale(0.5f);
-        font.draw(fontBatch, this.victory, WORLD_HEIGHT / 2f, WORLD_HEIGHT / (4f/3f));
-        font.draw(fontBatch, "Press Enter", WORLD_HEIGHT / 3f, WORLD_HEIGHT / 4f);
+        font.draw(fontBatch, this.victory, viewport.getScreenWidth() / 2f, viewport.getScreenHeight() / (4f/3f));
+        font.draw(fontBatch, "Press Enter", viewport.getScreenWidth() / 2f, viewport.getScreenHeight() / 4f);
         fontBatch.end();
         checkInputs();
     }
