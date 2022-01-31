@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.boatcorp.boatgame.frameworks.HealthBar;
 import com.boatcorp.boatgame.frameworks.PointSystem;
 
+import java.util.ArrayList;
+
 public class Player {
     private final SpriteBatch batch;
     private final Texture texture = new Texture(Gdx.files.internal("Entities/boat1.png"));
@@ -17,6 +19,7 @@ public class Player {
     private final HealthBar health;
     private final float maxHealth;
     private float currentHealth;
+    private ArrayList<Bullet> bullets;
 
     private final int RIGHT = 1;
     private final int LEFT = 2;
@@ -27,7 +30,7 @@ public class Player {
     private final int DOWN_RIGHT = 7;
     private final int DOWN_LEFT = 8;
     private int direction = RIGHT;
-    private final float MAX_SPEED = 3f;
+    private static final float MAX_SPEED = 3f;
 
 
     private float x;
@@ -43,12 +46,9 @@ public class Player {
         batch = new SpriteBatch();
         sprite = new Sprite(texture);
         health = new HealthBar();
+        bullets = new ArrayList<>();
         maxHealth = 100;
         currentHealth = 100;
-    }
-
-    public Sprite getSprite() {
-        return this.sprite;
     }
 
     public Vector2 getPosition() {
@@ -221,9 +221,49 @@ public class Player {
         return currentHealth;
     }
 
+    public Vector2 getVelocity() { return new Vector2(this.xVelocity, this.yVelocity); }
+
     public void takeDamage(int damage) {
-        if (currentHealth > 0) {
+        if (this.getHealth()> 0) {
             currentHealth -= damage;
+        }
+    }
+
+    public void combat(Matrix4 camera, ArrayList<College> colleges) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || !bullets.isEmpty()) {
+            if (bullets.isEmpty()) {
+                Vector2 adjustedPos = this.getPosition().add(10,10);
+                Vector2 bulletVelocity = this.getVelocity();
+                int xSign = (int) Math.signum(bulletVelocity.x);
+                int ySign = (int) Math.signum(bulletVelocity.y);
+
+                // Sets bullet velocity to current velocity of boat x2, ensuring no division by zero errors
+                if (bulletVelocity.isZero()) {
+                    bulletVelocity.add(0,5); // Default direction
+                } else if (bulletVelocity.x == 0) {
+                    bulletVelocity.scl(1, (5/bulletVelocity.y) * ySign);
+                } else if (bulletVelocity.y == 0)  {
+                    bulletVelocity.scl((5/bulletVelocity.x) * xSign, 1);
+                } else {
+                    bulletVelocity.scl((5/bulletVelocity.x) * xSign, (5/bulletVelocity.y) * ySign);
+                }
+
+                bullets.add(new Bullet(adjustedPos, bulletVelocity));
+            }
+            for (int i = 0; i < bullets.size(); i++) {
+                // Draw and move bullets and check for collisions
+                Bullet bullet = bullets.get(i);
+                bullet.setMatrix(camera);
+                bullet.draw();
+                bullet.move();
+                if (bullet.outOfRange(200)) { bullets.remove(bullet); }
+                for (College college : colleges) {
+                    if (bullet.hitTarget(college.getPosition())) {
+                        bullets.remove(bullet);
+                        college.takeDamage(10);
+                    }
+                }
+            }
         }
     }
 
@@ -234,5 +274,10 @@ public class Player {
     public void dispose() {
         health.dispose();
         batch.dispose();
+        if (!bullets.isEmpty()) {
+            for (Bullet bullet : bullets) {
+                bullet.dispose();
+            }
+        }
     }
 }

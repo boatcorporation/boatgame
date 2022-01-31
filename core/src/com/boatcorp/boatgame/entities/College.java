@@ -17,8 +17,8 @@ public class College {
     private final Sprite sprite;
     private Vector2 position;
     private ArrayList<Bullet> bullets;
-    private final ArrayList<Vector2> diagonalDirections = new ArrayList<>();
-    private final ArrayList<Vector2> cardinalDirections = new ArrayList<>();
+    private final ArrayList<Vector2> diagonalDirections;
+    private final ArrayList<Vector2> cardinalDirections;
     private final HealthBar health;
     private final float maxHealth;
     private float currentHealth;
@@ -35,11 +35,13 @@ public class College {
         maxHealth = 100;
         currentHealth = 100;
 
+        cardinalDirections = new ArrayList<>();
         cardinalDirections.add(new Vector2(5,0));
         cardinalDirections.add(new Vector2(-5,0));
         cardinalDirections.add(new Vector2(0,5));
         cardinalDirections.add(new Vector2(0,-5));
 
+        diagonalDirections = new ArrayList<>();
         diagonalDirections.add(new Vector2(4,4));
         diagonalDirections.add(new Vector2(4,4));
         diagonalDirections.add(new Vector2(4,-4));
@@ -61,7 +63,7 @@ public class College {
         Random rand = new Random();
         ArrayList<Vector2> randDir;
 
-        // Only begins combat when the player is close enough
+        // Only begins combat when the player is close enough and the college isn't defeated
         if (distance < 200) {
             if (bullets.isEmpty()) {
                 // Randomly choose from set attack patterns
@@ -77,7 +79,7 @@ public class College {
                 bullet.draw();
                 bullet.move();
                 if (bullet.outOfRange(300)) { bullets.remove(bullet); }
-                if (bullet.hitPlayer(player)) {
+                if (bullet.hitTarget(player.getPosition())) {
                     bullets.remove(bullet);
                     player.takeDamage(5);
                 }
@@ -94,6 +96,20 @@ public class College {
         health.draw(new Vector2(currentPos.x - 9.5f, currentPos.y - 5), maxHealth, currentHealth, 0.5f);
     }
 
+    public float getHealth() {
+        return this.currentHealth;
+    }
+
+    public boolean isAlive() {
+        return this.currentHealth > 0;
+    }
+
+    public void takeDamage(int damage) {
+        if (this.getHealth() > 0) {
+            currentHealth -= damage;
+        }
+    }
+
     public void setMatrix(Matrix4 combined) {
         batch.setProjectionMatrix(combined);
         health.setMatrix(combined);
@@ -102,7 +118,7 @@ public class College {
     public void dispose() {
         batch.dispose();
         health.dispose();
-        if (!(bullets.isEmpty())) {
+        if (!bullets.isEmpty()) {
             for (Bullet bullet : bullets) {
                 bullet.dispose();
             }

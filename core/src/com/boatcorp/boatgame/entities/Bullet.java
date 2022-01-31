@@ -52,15 +52,12 @@ public class Bullet {
         return (distance > range);
     }
 
-    public boolean hitPlayer(@NotNull Player player) {
-        Vector2 targetPos = player.getPosition();
+    public boolean hitTarget(@NotNull Vector2 position) {
+        position.add(10,10); // Centre hitbox
         Vector2 currentPos = this.getPosition();
-        // Centre hitbox
-        targetPos.x += 10;
-        targetPos.y += 10;
 
         // Return true if bullet has collided with player
-        double distance = Math.hypot(currentPos.x - targetPos.x, currentPos.y - targetPos.y);
+        double distance = Math.hypot(currentPos.x - position.x, currentPos.y - position.y);
         return (distance < 16);
     }
 

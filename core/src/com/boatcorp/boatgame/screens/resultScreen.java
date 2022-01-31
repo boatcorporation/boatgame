@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import org.jetbrains.annotations.NotNull;
 
 public class resultScreen implements Screen {
 
@@ -19,7 +20,8 @@ public class resultScreen implements Screen {
     private final String victory;
     private final Viewport viewport;
 
-    public resultScreen(boolean win, Game game) {
+    public resultScreen(boolean win, Game game, @NotNull Screen oldScreen) {
+        oldScreen.dispose();
         this.boatGame = game;
         victory = (win) ? "VICTORY" : "GAME OVER";
         viewport = new ExtendViewport(0, WORLD_HEIGHT);
