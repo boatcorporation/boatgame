@@ -23,7 +23,7 @@ public class Player {
     private final HealthBar health;
     private final float maxHealth;
     private float currentHealth;
-    private ArrayList<Bullet> bullets;
+    private final ArrayList<Bullet> bullets;
     private final OrthographicCamera cam;
 
     enum Direction {
@@ -36,7 +36,7 @@ public class Player {
         DOWN_RIGHT,
         DOWN_LEFT,
     }
-    
+
     private static final float MAX_SPEED = 3f;
     private Direction direction = Direction.RIGHT;
 
