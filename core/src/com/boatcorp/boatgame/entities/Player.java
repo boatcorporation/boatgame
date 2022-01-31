@@ -26,17 +26,19 @@ public class Player {
     private ArrayList<Bullet> bullets;
     private final OrthographicCamera cam;
 
-    private final int RIGHT = 1;
-    private final int LEFT = 2;
-    private final int UP = 3;
-    private final int DOWN = 4;
-    private final int UP_RIGHT = 5;
-    private final int UP_LEFT = 6;
-    private final int DOWN_RIGHT = 7;
-    private final int DOWN_LEFT = 8;
-    private int direction = RIGHT;
+    enum Direction {
+        RIGHT,
+        LEFT,
+        UP,
+        DOWN,
+        UP_RIGHT,
+        UP_LEFT,
+        DOWN_RIGHT,
+        DOWN_LEFT,
+    }
+    
     private static final float MAX_SPEED = 3f;
-
+    private Direction direction = Direction.RIGHT;
 
     private float x;
     private float y;
@@ -44,7 +46,6 @@ public class Player {
     private float yVelocity = 0.f;
     private float maxSpeed = 3f;
     private final float acceleration = 3f;
-
 
 
     public Player(OrthographicCamera camera) {
@@ -64,14 +65,14 @@ public class Player {
     public void draw() {
         batch.begin();
 
-        if(direction == UP) sprite.setRotation(0);
-        if(direction == DOWN) sprite.setRotation(180);
-        if(direction == RIGHT) sprite.setRotation(270);
-        if(direction == LEFT) sprite.setRotation(90);
-        if(direction == UP_RIGHT) sprite.setRotation(330);
-        if(direction == UP_LEFT) sprite.setRotation(45);
-        if(direction == DOWN_RIGHT) sprite.setRotation(225);
-        if(direction == DOWN_LEFT) sprite.setRotation(135);
+        if(direction == Direction.UP) sprite.setRotation(0);
+        if(direction == Direction.DOWN) sprite.setRotation(180);
+        if(direction == Direction.RIGHT) sprite.setRotation(270);
+        if(direction == Direction.LEFT) sprite.setRotation(90);
+        if(direction == Direction.UP_RIGHT) sprite.setRotation(330);
+        if(direction == Direction.UP_LEFT) sprite.setRotation(45);
+        if(direction == Direction.DOWN_RIGHT) sprite.setRotation(225);
+        if(direction == Direction.DOWN_LEFT) sprite.setRotation(135);
 
         sprite.setPosition(x, y);
         sprite.draw(batch);
@@ -88,40 +89,40 @@ public class Player {
             // moving right
             if(yVelocity > 0) {
                 // moving up
-                direction = UP_RIGHT;
+                direction = Direction.UP_RIGHT;
             }
             // moving down or no angle
             else if(yVelocity < 0) {
                 // moving down
-                direction = DOWN_RIGHT;
+                direction = Direction.DOWN_RIGHT;
             }
             else {
                 // just right
-                direction = RIGHT;
+                direction = Direction.RIGHT;
             }
         }
         if(xVelocity < 0) {
             // moving left
             if(yVelocity > 0) {
                 // moving up
-                direction = UP_LEFT;
+                direction = Direction.UP_LEFT;
             }
             // moving down or no angle
             else if(yVelocity < 0) {
                 // moving down
-                direction = DOWN_LEFT;
+                direction = Direction.DOWN_LEFT;
             }
             else {
                 // just left
-                direction = LEFT;
+                direction = Direction.LEFT;
             }
         }
         if(xVelocity == 0) {
             if(yVelocity < 0) {
-                direction = DOWN;
+                direction = Direction.DOWN;
             }
             else {
-                direction = UP;
+                direction = Direction.UP;
             }
         }
 
