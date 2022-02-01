@@ -6,13 +6,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.boatcorp.boatgame.BoatGame;
 import com.boatcorp.boatgame.frameworks.HealthBar;
 import com.boatcorp.boatgame.frameworks.PointSystem;
-import com.boatcorp.boatgame.screens.PlayScreen;
 
 import java.util.ArrayList;
 
@@ -125,8 +124,8 @@ public class Player {
             }
         }
 
-        x = x + xVelocity;
-        y = y + yVelocity;
+        x = MathUtils.clamp(x + xVelocity, 0, 1307 + ((Gdx.graphics.getWidth() - 640) * 0.19f));
+        y = MathUtils.clamp(y + yVelocity, 0, 1307 + ((Gdx.graphics.getHeight() - 480) * 0.19f));
     }
 
     private void movement(final float delta) {

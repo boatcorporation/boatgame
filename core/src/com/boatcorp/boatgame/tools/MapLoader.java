@@ -10,12 +10,16 @@ import static com.boatcorp.boatgame.screens.Constants.MAP_NAME;
 
 public class MapLoader implements Disposable {
 
-    public final TiledMap Map;
+    private final TiledMap Map;
     private final OrthogonalTiledMapRenderer Renderer;
 
     public MapLoader() {
         Map = new TmxMapLoader().load(MAP_NAME);
         Renderer = new OrthogonalTiledMapRenderer(Map, 1f);
+    }
+
+    public TiledMap getMap() {
+        return this.Map;
     }
 
 
