@@ -150,7 +150,7 @@ public class PlayScreen implements Screen {
         camera.zoom = DEFAULT_ZOOM;
 
         // Get properties of the map from the TileMap
-        MapProperties prop = mapLoader.Map.getProperties();
+        MapProperties prop = mapLoader.getMap().getProperties();
         int mapWidth = prop.get("width", Integer.class);
         int mapHeight = prop.get("height", Integer.class);
 
