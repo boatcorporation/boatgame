@@ -41,7 +41,8 @@ public class PlayScreen implements Screen {
     private final Hud hud;
 
 
-    public PlayScreen(Game game) {
+    public PlayScreen(Game game, Screen oldScreen) {
+        oldScreen.dispose();
         this.boatGame = game;
         batch = new SpriteBatch();
         fontBatch = new SpriteBatch();
