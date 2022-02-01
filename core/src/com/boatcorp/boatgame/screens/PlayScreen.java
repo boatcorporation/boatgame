@@ -38,7 +38,7 @@ public class PlayScreen implements Screen {
     private final BitmapFont font;
     private final Player player;
     private final ArrayList<College> colleges;
-    private Hud hud;
+    private final Hud hud;
 
 
     public PlayScreen(Game game) {
@@ -138,12 +138,17 @@ public class PlayScreen implements Screen {
         */
         // USEFUL FOR DEBUGGING
         /*
+        fontBatch.begin();
         Vector2 playerPos = player.getPosition();
         String coords = "X: " + playerPos.x + " Y: " + playerPos.y;
         String cameracoords = "X :" + camera.position.x + "Y: " + camera.position.y;
+        String screenDim = "X :" + Gdx.graphics.getWidth() + "Y: " + Gdx.graphics.getHeight();
+        font.draw(fontBatch, screenDim, 8, 480);
         font.draw(fontBatch, coords, 8, 440);
         font.draw(fontBatch, cameracoords, 8, 400);
+        fontBatch.end();
         */
+
     }
 
     private void update(final float delta) {
