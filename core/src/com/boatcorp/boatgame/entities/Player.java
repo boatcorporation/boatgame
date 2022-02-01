@@ -125,8 +125,8 @@ public class Player {
             }
         }
 
-        position.x = MathUtils.clamp(position.x + velocity.x, 0, 1371);
-        position.y = MathUtils.clamp(position.y + velocity.y, 0, 1333);
+        position.x = MathUtils.clamp(position.x + velocity.x, 0, 1421);
+        position.y = MathUtils.clamp(position.y + velocity.y, 0, 1371);
 
     }
 
@@ -236,6 +236,10 @@ public class Player {
         if (this.getHealth() > 0) {
             currentHealth -= damage;
         }
+    }
+
+    public boolean isDead() {
+        return currentHealth <= 0;
     }
 
     public void combat(Matrix4 camera, ArrayList<College> colleges) {

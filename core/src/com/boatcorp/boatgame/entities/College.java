@@ -102,7 +102,7 @@ public class College {
                 if (bullet.outOfRange(300)) { bullets.remove(bullet); }
                 if (bullet.hitTarget(player.getPosition())) {
                     bullets.remove(bullet);
-                    player.takeDamage(25);
+                    player.takeDamage(10);
                 }
             }
         }

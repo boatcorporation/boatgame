@@ -88,7 +88,11 @@ public class PlayScreen implements Screen {
     }
 
     private void combat() {
-        if (player.getHealth() <= 0) {
+        if (player.isDead()) {
+            player.dispose();
+            for(College college : colleges) {
+                college.dispose();
+            }
             boatGame.setScreen(new resultScreen(false, boatGame, this));
         }
         if (colleges.isEmpty()) {
@@ -107,7 +111,7 @@ public class PlayScreen implements Screen {
     }
 
     private void draw() {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Batch drawing
@@ -137,7 +141,7 @@ public class PlayScreen implements Screen {
         font.draw(fontBatch, displayPoint, 8, 50);
         */
         // USEFUL FOR DEBUGGING
-        /*
+
         fontBatch.begin();
         Vector2 playerPos = player.getPosition();
         String coords = "X: " + playerPos.x + " Y: " + playerPos.y;
@@ -147,7 +151,7 @@ public class PlayScreen implements Screen {
         font.draw(fontBatch, coords, 8, 440);
         font.draw(fontBatch, cameracoords, 8, 400);
         fontBatch.end();
-        */
+
 
     }
 
