@@ -267,7 +267,7 @@ public class Player {
                 for (College college : colleges) {
                     if (bullet.hitTarget(college.getPosition())) {
                         bullets.remove(bullet);
-                        college.takeDamage(10);
+                        college.takeDamage(5);
                     }
                 }
             }
