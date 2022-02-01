@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.boatcorp.boatgame.entities.College;
 import com.boatcorp.boatgame.entities.Player;
+import com.boatcorp.boatgame.frameworks.Hud;
 import com.boatcorp.boatgame.frameworks.PointSystem;
 import com.boatcorp.boatgame.tools.MapLoader;
 
@@ -37,6 +38,7 @@ public class PlayScreen implements Screen {
     private final BitmapFont font;
     private final Player player;
     private final ArrayList<College> colleges;
+    private Hud hud;
 
 
     public PlayScreen(Game game) {
@@ -55,6 +57,7 @@ public class PlayScreen implements Screen {
         colleges.add(new College("goodricke"));
         collegeSpread();
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
+        hud = new Hud(fontBatch);
     }
 
     private void collegeSpread() {
@@ -71,9 +74,14 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         update(delta);
         draw();
+
+        fontBatch.setProjectionMatrix(hud.getStage().getCamera().combined);
+        hud.setPointScore("Points: " + PointSystem.getPoints());
+        hud.getStage().act(delta);
+        hud.getStage().draw();
+
         combat();
     }
 
@@ -120,11 +128,12 @@ public class PlayScreen implements Screen {
         batch.end();
 
         // FontBatch drawing
+        /*
         fontBatch.begin();
         font.getData().setScale(0.5f);
         String displayPoint = "SCORE:" + PointSystem.getPoints();
         font.draw(fontBatch, displayPoint, 8, 50);
-
+        */
         // USEFUL FOR DEBUGGING
         /*
         Vector2 playerPos = player.getPosition();
@@ -133,7 +142,6 @@ public class PlayScreen implements Screen {
         font.draw(fontBatch, coords, 8, 440);
         font.draw(fontBatch, cameracoords, 8, 400);
         */
-        fontBatch.end();
     }
 
     private void update(final float delta) {
@@ -162,10 +170,16 @@ public class PlayScreen implements Screen {
         world.step(delta, 6,2);
 
         player.update(delta);
+
+
     }
 
     @Override
-    public void resize(int width, int height) { camera.setToOrtho(false,(float)width/16,(float)height/16); }
+    public void resize(int width, int height) {
+        // camera.setToOrtho(false,(float)width/16,(float)height/16);
+        viewport.update(width, height);
+        hud.getStage().getViewport().update(width, height);
+    }
 
     @Override
     public void pause() {
