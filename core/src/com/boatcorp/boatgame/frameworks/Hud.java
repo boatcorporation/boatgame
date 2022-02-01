@@ -57,15 +57,13 @@ public class Hud {
         healthBar.setValue(player.getMaxHealth());
 
         int height = 10;
+        int scale = 2;
         healthBarStyle.background = getColouredDrawable(player.getMaxHealth(), height+4, Color.WHITE);
-        healthBarStyle.knob = getColouredDrawable(player.getMaxHealth(), height, Color.RED);
+        healthBarStyle.knob = getColouredDrawable(0, height, Color.RED);
         healthBarStyle.knobBefore = getColouredDrawable(player.getHealth(), height, Color.RED);
-        healthBarStyle.knobBefore.setLeftWidth(2);
         healthBarStyle.knobBefore.setRightWidth(2);
         healthBarStyle.background.setLeftWidth(2);
         healthBarStyle.background.setRightWidth(2);
-
-
 
         stage.addActor(pointScore);
         stage.addActor(healthBar);
@@ -81,6 +79,10 @@ public class Hud {
 
     public void setHealthValue(float newValue) {
         healthBar.setValue(newValue);
+        healthBarStyle.knob = getColouredDrawable(2, 10, Color.RED);
+        healthBarStyle.knobBefore = getColouredDrawable(newValue, 10, Color.RED);
+
+
     }
 
     /*
