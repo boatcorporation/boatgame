@@ -141,7 +141,7 @@ public class PlayScreen implements Screen {
         font.draw(fontBatch, displayPoint, 8, 50);
         */
         // USEFUL FOR DEBUGGING
-
+        /*
         fontBatch.begin();
         Vector2 playerPos = player.getPosition();
         String coords = "X: " + playerPos.x + " Y: " + playerPos.y;
@@ -151,7 +151,7 @@ public class PlayScreen implements Screen {
         font.draw(fontBatch, coords, 8, 440);
         font.draw(fontBatch, cameracoords, 8, 400);
         fontBatch.end();
-
+        */
 
     }
 
