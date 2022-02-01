@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -124,8 +125,9 @@ public class Player {
             }
         }
 
-        position.x = position.x + velocity.x;
-        position.y = position.y + velocity.y;
+        position.x = MathUtils.clamp(position.x + velocity.x, 0, 1307 + ((Gdx.graphics.getWidth() - 640) * 0.19f));
+        position.y = MathUtils.clamp(position.y + velocity.y, 0, 1307 + ((Gdx.graphics.getHeight() - 480) * 0.19f));
+
     }
 
     private void movement(final float delta) {
