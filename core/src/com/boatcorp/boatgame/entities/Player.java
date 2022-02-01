@@ -125,8 +125,8 @@ public class Player {
             }
         }
 
-        x = MathUtils.clamp(x + xVelocity, 0, 1307 + ((Gdx.graphics.getWidth() - 640) * 0.19f));
-        y = MathUtils.clamp(y + yVelocity, 0, 1307 + ((Gdx.graphics.getHeight() - 480) * 0.19f));
+        position.x = MathUtils.clamp(position.x + velocity.x, 0, 1307 + ((Gdx.graphics.getWidth() - 640) * 0.19f));
+        position.y = MathUtils.clamp(position.y + velocity.y, 0, 1307 + ((Gdx.graphics.getHeight() - 480) * 0.19f));
 
     }
 
