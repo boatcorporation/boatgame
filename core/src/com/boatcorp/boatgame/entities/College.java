@@ -19,6 +19,8 @@ public class College {
     private ArrayList<Bullet> bullets;
     private final ArrayList<Vector2> diagonalDirections;
     private final ArrayList<Vector2> cardinalDirections;
+    private final ArrayList<Vector2> rotatingDirections;
+    private final ArrayList<ArrayList<Vector2>> attackPatterns;
     private final HealthBar health;
     private final float maxHealth;
     private float currentHealth;
@@ -47,6 +49,24 @@ public class College {
         diagonalDirections.add(new Vector2(4,-4));
         diagonalDirections.add(new Vector2(-4,4));
         diagonalDirections.add(new Vector2(-4,-4));
+
+        rotatingDirections = new ArrayList<>();
+        rotatingDirections.add(new Vector2(5, 0));
+        rotatingDirections.add(new Vector2(4, 4));
+        rotatingDirections.add(new Vector2(-5, 0));
+        rotatingDirections.add(new Vector2(4, 4));
+        rotatingDirections.add(new Vector2(4, -4));
+        rotatingDirections.add(new Vector2(0, 5));
+        rotatingDirections.add(new Vector2(-4, 4));
+        rotatingDirections.add(new Vector2(-4, -4));
+        rotatingDirections.add(new Vector2(0, -5));
+
+
+        attackPatterns = new ArrayList<>();
+        attackPatterns.add(cardinalDirections);
+        attackPatterns.add(rotatingDirections);
+        attackPatterns.add(diagonalDirections);
+
     }
 
     public Vector2 getPosition() {
@@ -67,7 +87,8 @@ public class College {
         if (distance < 200) {
             if (bullets.isEmpty()) {
                 // Randomly choose from set attack patterns
-                randDir = (rand.nextBoolean()) ? diagonalDirections: cardinalDirections;
+                int random_number = rand.nextInt(attackPatterns.size());
+                randDir = attackPatterns.get(random_number);
                 for (Vector2 direction : randDir) {
                     bullets.add(new Bullet(this.getPosition(), direction));
                 }
@@ -81,7 +102,7 @@ public class College {
                 if (bullet.outOfRange(300)) { bullets.remove(bullet); }
                 if (bullet.hitTarget(player.getPosition())) {
                     bullets.remove(bullet);
-                    player.takeDamage(5);
+                    player.takeDamage(25);
                 }
             }
         }
