@@ -57,7 +57,7 @@ public class PlayScreen implements Screen {
         colleges.add(new College("goodricke"));
         collegeSpread();
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
-        hud = new Hud(fontBatch);
+        hud = new Hud(fontBatch, player);
     }
 
     private void collegeSpread() {
@@ -79,8 +79,10 @@ public class PlayScreen implements Screen {
 
         fontBatch.setProjectionMatrix(hud.getStage().getCamera().combined);
         hud.setPointScore("Points: " + PointSystem.getPoints());
-        hud.getStage().act(delta);
+        hud.setHealthValue(player.getHealth());
         hud.getStage().draw();
+
+        hud.getStage().act(delta);
 
         combat();
     }

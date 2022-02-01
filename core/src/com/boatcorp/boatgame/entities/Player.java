@@ -78,7 +78,7 @@ public class Player {
 
         batch.end();
 
-        health.draw(new Vector2(8, 20), maxHealth, currentHealth, 2);
+        // health.draw(new Vector2(8, 20), maxHealth, currentHealth, 2);
     }
 
     public void update (final float delta) {
@@ -227,10 +227,12 @@ public class Player {
         return currentHealth;
     }
 
+    public float getMaxHealth() { return maxHealth; }
+
     public Vector2 getVelocity() { return new Vector2(this.xVelocity, this.yVelocity); }
 
     public void takeDamage(int damage) {
-        if (this.getHealth()> 0) {
+        if (this.getHealth() > 0) {
             currentHealth -= damage;
         }
     }
