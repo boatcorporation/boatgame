@@ -9,10 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.boatcorp.boatgame.BoatGame;
 import com.boatcorp.boatgame.frameworks.HealthBar;
 import com.boatcorp.boatgame.frameworks.PointSystem;
-import com.boatcorp.boatgame.screens.PlayScreen;
 
 import java.util.ArrayList;
 
@@ -37,18 +35,18 @@ public class Player {
         DOWN_LEFT,
     }
 
+    private final float ACCELERATION = 3f;
     private static final float MAX_SPEED = 3f;
     private Direction direction = Direction.RIGHT;
+    
+    private final Vector2 position;
+    private final Vector2 velocity;
 
-    private float x;
-    private float y;
-    private float xVelocity = 0.0f;
-    private float yVelocity = 0.f;
-    private float maxSpeed = 3f;
-    private final float acceleration = 3f;
 
 
     public Player(OrthographicCamera camera) {
+        position = new Vector2(100,100);
+        velocity = new Vector2(0,0);
         batch = new SpriteBatch();
         sprite = new Sprite(texture);
         health = new HealthBar();
@@ -59,7 +57,7 @@ public class Player {
     }
 
     public Vector2 getPosition() {
-        return new Vector2(x,y);
+        return position.cpy();
     }
 
     public void draw() {
@@ -74,7 +72,7 @@ public class Player {
         if(direction == Direction.DOWN_RIGHT) sprite.setRotation(225);
         if(direction == Direction.DOWN_LEFT) sprite.setRotation(135);
 
-        sprite.setPosition(x, y);
+        sprite.setPosition(position.x, position.y);
         sprite.draw(batch);
 
         batch.end();
@@ -85,14 +83,14 @@ public class Player {
     public void update (final float delta) {
         movement(delta);
 
-        if(xVelocity > 0) {
+        if(velocity.x > 0) {
             // moving right
-            if(yVelocity > 0) {
+            if(velocity.y > 0) {
                 // moving up
                 direction = Direction.UP_RIGHT;
             }
             // moving down or no angle
-            else if(yVelocity < 0) {
+            else if(velocity.y < 0) {
                 // moving down
                 direction = Direction.DOWN_RIGHT;
             }
@@ -101,14 +99,14 @@ public class Player {
                 direction = Direction.RIGHT;
             }
         }
-        if(xVelocity < 0) {
+        if(velocity.x < 0) {
             // moving left
-            if(yVelocity > 0) {
+            if(velocity.y > 0) {
                 // moving up
                 direction = Direction.UP_LEFT;
             }
             // moving down or no angle
-            else if(yVelocity < 0) {
+            else if(velocity.y < 0) {
                 // moving down
                 direction = Direction.DOWN_LEFT;
             }
@@ -117,8 +115,8 @@ public class Player {
                 direction = Direction.LEFT;
             }
         }
-        if(xVelocity == 0) {
-            if(yVelocity < 0) {
+        if(velocity.x == 0) {
+            if(velocity.y < 0) {
                 direction = Direction.DOWN;
             }
             else {
@@ -126,8 +124,8 @@ public class Player {
             }
         }
 
-        x = x + xVelocity;
-        y = y + yVelocity;
+        position.x = position.x + velocity.x;
+        position.y = position.y + velocity.y;
     }
 
     private void movement(final float delta) {
@@ -142,7 +140,7 @@ public class Player {
 
         float incrementAmount = 0.1f;
         float diagConstant = 0.7071f;
-        maxSpeed = MAX_SPEED;
+        float maxSpeed = MAX_SPEED;
 
         // Horizontal movement
         if(right) {
@@ -150,9 +148,9 @@ public class Player {
                 maxSpeed *= diagConstant;
                 incrementAmount *= 0.5f;
             }
-            xVelocity += acceleration * delta;
-            if (xVelocity > maxSpeed) {
-                xVelocity = maxSpeed;
+            velocity.x += ACCELERATION * delta;
+            if (velocity.x > maxSpeed) {
+                velocity.x = maxSpeed;
             }
             PointSystem.incrementPoint(incrementAmount);
         }
@@ -161,24 +159,24 @@ public class Player {
                 maxSpeed *= diagConstant;
                 incrementAmount *= 0.5f;
             }
-            xVelocity -= acceleration * delta;
-            if(xVelocity < -maxSpeed) {
-                xVelocity = -maxSpeed;
+            velocity.x -= ACCELERATION * delta;
+            if(velocity.x < -maxSpeed) {
+                velocity.x = -maxSpeed;
             }
             PointSystem.incrementPoint(incrementAmount);
         }
         else {
             // neither are pressed
-            if(xVelocity < 0) {
-                xVelocity += 2*acceleration * delta;
-                if(xVelocity >= 0) {
-                    xVelocity = 0.0f;
+            if(velocity.x < 0) {
+                velocity.x += 2*ACCELERATION * delta;
+                if(velocity.x >= 0) {
+                    velocity.x = 0.0f;
                 }
             }
             else {
-                xVelocity -= 2*acceleration * delta;
-                if (xVelocity <= 0) {
-                    xVelocity = 0.0f;
+                velocity.x -= 2*ACCELERATION * delta;
+                if (velocity.x <= 0) {
+                    velocity.x = 0.0f;
                 }
             }
         }
@@ -190,9 +188,9 @@ public class Player {
                 maxSpeed *= diagConstant;
                 incrementAmount *= 0.5f;
             }
-            yVelocity += acceleration * delta;
-            if (yVelocity > maxSpeed) {
-                yVelocity = maxSpeed;
+            velocity.y += ACCELERATION * delta;
+            if (velocity.y > maxSpeed) {
+                velocity.y = maxSpeed;
             }
             PointSystem.incrementPoint(incrementAmount);
         }
@@ -201,24 +199,24 @@ public class Player {
                 maxSpeed *= diagConstant;
                 incrementAmount *= 0.5f;
             }
-            yVelocity -= acceleration * delta;
-            if(yVelocity < -maxSpeed) {
-                yVelocity = -maxSpeed;
+            velocity.y -= ACCELERATION * delta;
+            if(velocity.y < -maxSpeed) {
+                velocity.y = -maxSpeed;
             }
             PointSystem.incrementPoint(incrementAmount);
         }
         else {
             // Neither are pressed
-            if(yVelocity < 0) {
-                yVelocity += 2*acceleration * delta;
-                if(yVelocity >= 0) {
-                    yVelocity = 0.0f;
+            if(velocity.y < 0) {
+                velocity.y += 2*ACCELERATION * delta;
+                if(velocity.y >= 0) {
+                    velocity.y = 0.0f;
                 }
             }
             else {
-                yVelocity -= 2*acceleration * delta;
-                if (yVelocity <= 0) {
-                    yVelocity = 0.0f;
+                velocity.y -= 2*ACCELERATION * delta;
+                if (velocity.y <= 0) {
+                    velocity.y = 0.0f;
                 }
             }
         }
@@ -228,7 +226,7 @@ public class Player {
         return currentHealth;
     }
 
-    public Vector2 getVelocity() { return new Vector2(this.xVelocity, this.yVelocity); }
+    public Vector2 getVelocity() { return velocity.cpy(); }
 
     public void takeDamage(int damage) {
         if (this.getHealth()> 0) {
@@ -240,9 +238,9 @@ public class Player {
         if (Gdx.input.isTouched() || !bullets.isEmpty()) {
             if (bullets.isEmpty()) {
                 Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                cam.unproject(mousePosition);
-                float velX = mousePosition.x - x;
-                float velY = mousePosition.y - y;
+                Vector3 newPosition = cam.unproject(mousePosition);
+                float velX = newPosition.x - position.x;
+                float velY = newPosition.y - position.y;
                 float length = (float) Math.sqrt(velX * velX + velY * velY);
                 if (length != 0) {
                     velX = velX * 10 / length;
