@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -41,8 +40,7 @@ public class PlayScreen implements Screen {
     private final Hud hud;
 
 
-    public PlayScreen(Game game, Screen oldScreen) {
-        oldScreen.dispose();
+    public PlayScreen(Game game) {
         this.boatGame = game;
         batch = new SpriteBatch();
         fontBatch = new SpriteBatch();
@@ -56,13 +54,8 @@ public class PlayScreen implements Screen {
         colleges.add(new College("langwith"));
         colleges.add(new College("james"));
         colleges.add(new College("goodricke"));
-        collegeSpread();
         font = new BitmapFont(Gdx.files.internal("fonts/korg.fnt"), Gdx.files.internal("fonts/korg.png"), false);
         hud = new Hud(fontBatch, player);
-    }
-
-    private void collegeSpread() {
-        // TODO: Implement function
     }
 
     @Override
@@ -94,10 +87,10 @@ public class PlayScreen implements Screen {
             for(College college : colleges) {
                 college.dispose();
             }
-            boatGame.setScreen(new resultScreen(false, boatGame, this));
+            boatGame.setScreen(new resultScreen(false, boatGame));
         }
         if (colleges.isEmpty()) {
-            boatGame.setScreen(new resultScreen(true, boatGame, this));
+            boatGame.setScreen(new resultScreen(true, boatGame));
         }
         for (int i = 0; i < colleges.size(); i++) {
             College college = colleges.get(i);
@@ -133,26 +126,6 @@ public class PlayScreen implements Screen {
         batch.begin();
         // Empty batch
         batch.end();
-
-        // FontBatch drawing
-        /*
-        fontBatch.begin();
-        font.getData().setScale(0.5f);
-        String displayPoint = "SCORE:" + PointSystem.getPoints();
-        font.draw(fontBatch, displayPoint, 8, 50);
-        */
-        // USEFUL FOR DEBUGGING
-        /*
-        fontBatch.begin();
-        Vector2 playerPos = player.getPosition();
-        String coords = "X: " + playerPos.x + " Y: " + playerPos.y;
-        String cameracoords = "X :" + camera.position.x + "Y: " + camera.position.y;
-        String screenDim = "X :" + Gdx.graphics.getWidth() + "Y: " + Gdx.graphics.getHeight();
-        font.draw(fontBatch, screenDim, 8, 480);
-        font.draw(fontBatch, coords, 8, 440);
-        font.draw(fontBatch, cameracoords, 8, 400);
-        fontBatch.end();
-        */
 
     }
 
@@ -211,6 +184,7 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
+        hud.dispose();
         fontBatch.dispose();
         font.dispose();
         world.dispose();

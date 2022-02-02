@@ -2,7 +2,6 @@ package com.boatcorp.boatgame;
 
 import com.badlogic.gdx.Game;
 import com.boatcorp.boatgame.screens.MainMenuScreen;
-import com.boatcorp.boatgame.screens.PlayScreen;
 
 
 public class BoatGame extends Game {

@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.boatcorp.boatgame.frameworks.PointSystem;
-import org.jetbrains.annotations.NotNull;
 
 public class resultScreen implements Screen {
 
@@ -22,8 +21,7 @@ public class resultScreen implements Screen {
     private final String victory;
     private final Viewport viewport;
 
-    public resultScreen(boolean win, Game game, @NotNull Screen oldScreen) {
-        oldScreen.dispose();
+    public resultScreen(boolean win, Game game) {
         this.boatGame = game;
         victory = (win) ? "VICTORY" : "GAME OVER";
         viewport = new ExtendViewport(0, WORLD_HEIGHT);
@@ -56,7 +54,7 @@ public class resultScreen implements Screen {
     private void checkInputs() {
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER) ) {
             PointSystem.setPoints(0);
-            boatGame.setScreen(new PlayScreen(boatGame, this));
+            boatGame.setScreen(new PlayScreen(boatGame));
         }
 
     }

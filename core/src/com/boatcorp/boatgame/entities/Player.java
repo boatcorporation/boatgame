@@ -230,8 +230,6 @@ public class Player {
 
     public float getMaxHealth() { return maxHealth; }
 
-    public Vector2 getVelocity() { return velocity.cpy(); }
-
     public void takeDamage(int damage) {
         if (this.getHealth() > 0) {
             currentHealth -= damage;
@@ -283,8 +281,8 @@ public class Player {
     }
 
     public void dispose() {
-        health.dispose();
         batch.dispose();
+        health.dispose();
         if (!bullets.isEmpty()) {
             for (Bullet bullet : bullets) {
                 bullet.dispose();

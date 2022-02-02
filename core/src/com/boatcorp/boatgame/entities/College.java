@@ -73,11 +73,6 @@ public class College {
         return position.cpy();
     }
 
-    public void setPosition(@NotNull Vector2 pos) {
-        position.x = pos.x;
-        position.y = pos.y;
-    }
-
     public void combat(@NotNull Vector2 playerPos, Matrix4 camera, Player player) {
         double distance = Math.hypot(position.x - playerPos.x, position.y - playerPos.y);
         Random rand = new Random();

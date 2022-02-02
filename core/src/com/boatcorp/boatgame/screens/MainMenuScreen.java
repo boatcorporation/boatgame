@@ -61,7 +61,7 @@ public class MainMenuScreen implements Screen {
     private void checkInputs() {
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER) ) {
             PointSystem.setPoints(0);
-            boatGame.setScreen(new PlayScreen(boatGame, this));
+            boatGame.setScreen(new PlayScreen(boatGame));
         }
 
     }

@@ -1,31 +1,28 @@
 package com.boatcorp.boatgame.frameworks;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.boatcorp.boatgame.entities.Player;
 
 public class Hud {
-    private Stage stage;
-    private FitViewport stageViewport;
-    private BitmapFont font;
-    private Label pointScore;
-    private Player player;
-    private ProgressBar.ProgressBarStyle healthBarStyle;
-    private ProgressBar healthBar;
+    private final Stage stage;
+    private final FitViewport stageViewport;
+    private final BitmapFont font;
+    private final Label pointScore;
+    private final Player player;
+    private final ProgressBar.ProgressBarStyle healthBarStyle;
+    private final ProgressBar healthBar;
 
     private Drawable getColouredDrawable(float width, float height, Color color) {
         Pixmap pixmap = new Pixmap((int)width, (int)height, Pixmap.Format.RGBA8888);
@@ -57,7 +54,6 @@ public class Hud {
         healthBar.setValue(player.getMaxHealth());
 
         int height = 10;
-        int scale = 2;
         healthBarStyle.background = getColouredDrawable(player.getMaxHealth(), height+4, Color.WHITE);
         healthBarStyle.knob = getColouredDrawable(0, height, Color.RED);
         healthBarStyle.knobBefore = getColouredDrawable(player.getHealth(), height, Color.RED);
@@ -71,8 +67,6 @@ public class Hud {
 
     public Stage getStage() { return stage; }
 
-    public Label getPointScore() { return pointScore; }
-
     public void setPointScore(String newText) {
         pointScore.setText(newText);
     }
@@ -85,14 +79,9 @@ public class Hud {
 
     }
 
-    /*
-    public void updateHealth() {
-        healthBar.draw(new Vector2(8, 20), player.getMaxHealth(), player.getHealth(), 2);
-    }
-
-     */
-
     public void dispose() {
+        font.dispose();
+        player.dispose();
         stage.dispose();
     }
 
